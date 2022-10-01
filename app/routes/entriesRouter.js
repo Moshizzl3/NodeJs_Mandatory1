@@ -4,7 +4,6 @@ export const entriesRouter = Router();
 
 entriesRouter.get("/entries", (req, res) => {
   res.status(200).send({ data: entries });
-  console.log(entries[0])
 });
 
 entriesRouter.get("/entries/:id", (req, res) => {
