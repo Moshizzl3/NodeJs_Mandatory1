@@ -1,13 +1,15 @@
-const rootDiv = document.getElementById("root");
+const navBarContainer = document.getElementById("navContainer");
+
+const rootDiv = document.getElementById("sidePanel");
 
 function getEntries() {
   fetch("/entries")
     .then((response) => response.json())
     .then((data) => {
-      data.data.forEach((element) => {
-        console.log(element);
+      data.data.forEach((entry) => {
+        console.log(entry);
         const pTag = document.createElement("p");
-        pTag.textContent = element.title;
+        pTag.textContent = entry.title;
         rootDiv.appendChild(pTag);
       });
     });
