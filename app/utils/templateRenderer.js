@@ -9,7 +9,7 @@ let footer = fs
 
 export function renderPage(path, options = {}) {
 
-    const page = fs.readFileSync(path);
+    let page = fs.readFileSync(path);
     navbar = navbar
       .replace("%%TAB_TITLE%%", options.tabTitle || "Notepad")
       .replace("%%PAGE_STYLESHEET%%", options.PAGE_STYLESHEET || "");
