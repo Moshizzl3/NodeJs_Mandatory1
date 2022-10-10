@@ -11,14 +11,21 @@ userRouter.get("/users/:id", (req, res) => {
   res.status(200).send({ data: user });
 });
 
-userRouter.get("/users/:email/:password", (req, res) => {
+userRouter.post("/login", (req, res) => {
+
   const user = users.find(
     (user) =>
-      user.userEmail === req.params.email &&
-      user.userPassword === req.params.password
+      user.userEmail === req.body.email &&
+      user.userPassword === req.body.password
   );
-  res.status(200).send({ data: user });
+  if(user){
+    res.status(200).send({ data: user.userId});
+  }
+  else {
+    res.status(404).send("No match")
+  }
 });
+
 
 const users = [
   {

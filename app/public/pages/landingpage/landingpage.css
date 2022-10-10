@@ -1,3 +1,7 @@
-.navBarContainer{
-    display: block;
+body{
+    background-color: rgb(61, 178, 178);
+}
+
+.mainContainer{
+    background-color: rgb(102, 197, 197);
 }

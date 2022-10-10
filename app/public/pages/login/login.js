@@ -1,16 +1,25 @@
 const loginButton = document.getElementById("login-button");
 const navBarContainer = document.getElementById("navContainer");
 
-navBarContainer.style.display = "block"; //Hides the navbar on loginpage
-
-function getDataFromForm() {
+async function getDataFromForm() {
   const form = document.getElementById("login-form");
-  const data = new FormData(form);
+  const formData = new FormData(form);
 
-  for (let [key, value] of data) {
-    console.log(key, value);
+  const response = await fetch("/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(Object.fromEntries(formData)),
+  });
+  
+  if(response.ok) {
+    const data = await response.json();
+    sessionStorage.setItem("userId", data.data);
+    window.location.replace("/");
+  } else {
+    //TODO add some text to user of wrong input
   }
-  console.log([data.get("email")]);
 }
 
 loginButton.addEventListener("click", getDataFromForm);
