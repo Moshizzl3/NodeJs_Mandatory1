@@ -2,6 +2,35 @@ body{
     background-color: rgb(61, 178, 178);
 }
 
-.mainContainer{
-    background-color: rgb(102, 197, 197);
+.mainContentContainer{
+    height: 78vh;
+
+}
+
+.contentTitle{
+    font-weight: bold;
+    font-size: 115%;
+}
+
+.contentText{
+    white-space: pre-line;
+}
+
+.contentRow{
+    background-color:  rgba(102, 197, 197,0.1);
+    padding: 8px;
+}
+
+
+#contentPanel{
+    background-color: whitesmoke;
+}
+#sidePanel{
+    background-color: whitesmoke;
+}
+
+
+
+.entryClick:hover{
+    background-color: rgb(214, 208, 208);
 }

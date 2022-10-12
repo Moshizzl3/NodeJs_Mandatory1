@@ -1,4 +1,4 @@
-import express, { json } from "express";
+import express from "express";
 import { entriesRouter } from "./routes/entriesRouter.js";
 import { userRouter } from "./routes/usersRouter.js";
 import { renderPage } from "./utils/templateRenderer.js";
@@ -31,6 +31,7 @@ app.get("/login", (req, res) => {
     {
       PAGE_SCRIPT: `<script src="/pages/login/login.js"></script>`,
       tabTitle: "Login",
+      PAGE_STYLESHEET: `<link rel="stylesheet" href="/pages/login/login.css">`,
     },
     false
   );

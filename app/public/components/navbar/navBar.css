@@ -1,16 +1,13 @@
 .navBarContainer1 {
     height: 8vh;
-    background-color: rgb(61, 126, 126);
+    background-color: rgba(95, 63, 160, 0.6);
+    
 }
 
-.mainContainer {
-    height: calc(100vh - 10vh);
-}
 
 footer {
     height: 8vh;
 }
 .searchButton{
     background-color: rgb(78, 77, 139);
-    color: black;
 }

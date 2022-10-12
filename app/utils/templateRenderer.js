@@ -4,6 +4,11 @@ let navbar = fs
   .readFileSync("./public/components/navbar/navbar.html")
   .toString();
 
+  const modal = fs
+  .readFileSync("./public/components/modal/modal.html")
+  .toString();
+
+
 export function renderPage(path, options = {}, isLoggedin) {
   let footer = fs
     .readFileSync("./public/components/footer/footer.html")
@@ -12,7 +17,7 @@ export function renderPage(path, options = {}, isLoggedin) {
   let page = fs.readFileSync(path.toString()).toString();
 
   page = page
-    .replace("%%PAGE_STYLESHEET%%", options.styleSheet || "")
+    .replace("%%PAGE_STYLESHEET%%", options.PAGE_STYLESHEET || "")
     .replace("%%TAB_TITLE%%", options.tabTitle || "Notepad");
 
   navbar = navbar
@@ -22,6 +27,6 @@ export function renderPage(path, options = {}, isLoggedin) {
   footer = footer.replace("%%PAGE_SCRIPT%%", options.PAGE_SCRIPT || "");
 
   if (isLoggedin) {
-    return navbar + page + footer;
+    return navbar + page + modal+ footer;
   } else return page + footer;
 }
