@@ -1,77 +1,121 @@
+
+
 const navBarContainer = document.getElementById("navContainer");
 const sidePanelDiv = document.getElementById("sidePanel");
 const contentPanelDiv = document.getElementById("contentPanel");
-const modalDiv = document.getElementById("modalBody")
-const myModallLabel = document.getElementById("myModallLabel")
+const modalDiv = document.getElementById("modalBody");
+const myModallLabel = document.getElementById("myModallLabel");
+const newEntryModal = document.getElementById("myModallLabelNewEntry");
+const addEntryButton = document.getElementById("addEntryButton");
+
+//check if a user is logged in
+if (sessionStorage.getItem("userId")) {
+  getEntries();
+} else {
+  window.location.replace("/login");
+}
 
 async function getEntries() {
-
-  const response = await fetch(`/entries/user/${sessionStorage.getItem("userId")}`);
+  const response = await fetch(
+    `/entries/user/${sessionStorage.getItem("userId")}`
+  );
   const data = await response.json();
 
   data.data.forEach((entry) => {
-    console.log(entry);
-
-    const hTag = document.createElement("h4");
+    const hTag = document.createElement("p");
     hTag.classList.add("border", "entryClick", "rounded");
     hTag.id = entry.entriesId;
     hTag.textContent = entry.title;
     sidePanelDiv.appendChild(hTag);
 
-    hTag.addEventListener("click", () => fillContent(entry));
+    hTag.addEventListener("click", () => fillContentPanel(entry));
   });
 }
 
- function fillContent(entry) {
-  contentPanelDiv.innerHTML = ""
-  entry.subEntries.forEach( subentry => {
-
+function fillContentPanel(entry) {
+  contentPanelDiv.innerHTML = "";
+  entry.subEntries.forEach((subentry) => {
+    //title
     const pTagTitle = document.createElement("p");
     pTagTitle.classList.add("contentTitle");
     pTagTitle.textContent = subentry.subTitle;
 
-
+    //text
     const pTagText = document.createElement("text");
     pTagText.classList.add("contentText");
     pTagText.textContent = subentry.text;
 
-    console.log(subentry.imageUrl)
+    //boostrap row
+    const divTagRow = document.createElement("div");
+    divTagRow.classList.add(
+      "row",
+      "border",
+      "rounded",
+      "mt-4",
+      "m-2",
+      "contentRow"
+    );
 
-    const divTagRow = document.createElement("div")
-    divTagRow.classList.add("row", "border", "rounded", "m-2", "contentRow")
-   
-    const divTagContainer = document.createElement("div")
-    divTagContainer.classList.add("container")
+    //boststrap container
+    const divTagContainer = document.createElement("div");
+    divTagContainer.classList.add("container");
 
-    divTagRow.appendChild(divTagContainer)
+    divTagRow.appendChild(divTagContainer);
 
-    divTagContainer.appendChild(pTagTitle)
-    divTagContainer.appendChild(pTagText)
+    divTagContainer.appendChild(pTagTitle);
+    divTagContainer.appendChild(pTagText);
 
-    if(subentry.hasOwnProperty('imageUrl')){
+    //create image if there is an imageurl
+    if (subentry.hasOwnProperty("imageUrl")) {
       const imageTag = document.createElement("img");
-      imageTag.setAttribute("data-bs-toggle", "modal")
-      imageTag.setAttribute("data-bs-target","#myModal")
+      imageTag.setAttribute("data-bs-toggle", "modal");
+      imageTag.setAttribute("data-bs-target", "#myModal");
       imageTag.classList.add("img-fluid", "mx-auto", "d-block", "w-75");
-      imageTag.src = subentry.imageUrl
-      divTagRow.appendChild(imageTag)
+      imageTag.src = subentry.imageUrl;
+      divTagRow.appendChild(imageTag);
 
-      imageTag.addEventListener("click", ()=>{
-        fillModal(subentry, imageTag)
-})
-      
+      //modal for bigger image
+      imageTag.addEventListener("click", () => {
+        fillModal(subentry, imageTag);
+      });
     }
-
     contentPanelDiv.appendChild(divTagRow);
-  })
+  });
 }
 
-function fillModal(data, element){
-  element.classList.remove()
-  modalDiv.innerHTML = ""
-  myModallLabel.textContent = data.subTitle
-  modalDiv.appendChild(element.cloneNode())
+function fillModal(data, element) {
+  element.classList.remove();
+  modalDiv.innerHTML = "";
+  myModallLabel.textContent = data.subTitle;
+  modalDiv.appendChild(element.cloneNode());
 }
 
-getEntries();
+async function addNewEntry() {
+  const newEntryName = document.getElementById("newInputTitle");
 
+  const entry = {
+    entriesId: 1,
+    title: "Uge 35",
+    userId: 1,
+    subEntries: [
+      {
+        subEntriesId: 1,
+        subTitle: "GitHub og git",
+        text: "",
+      },
+    ],
+  };
+
+  const response = await fetch("/entries", {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(entry)
+  });
+
+  if (response.ok){
+    console.log("response ok")
+  }
+
+}
+
+addEntryButton.addEventListener("click",  ()=>  addNewEntry().then(getEntries()));

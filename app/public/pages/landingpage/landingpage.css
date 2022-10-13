@@ -1,9 +1,9 @@
 body{
-    background-color: rgb(61, 178, 178);
+    background-color: rgba(100, 202, 155, 0.8);
 }
 
 .mainContentContainer{
-    height: 78vh;
+    height: 76vh;
 
 }
 
@@ -13,7 +13,7 @@ body{
 }
 
 .contentText{
-    white-space: pre-line;
+    white-space: pre-wrap;
 }
 
 .contentRow{

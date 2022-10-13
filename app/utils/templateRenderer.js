@@ -1,8 +1,6 @@
 import fs from "fs";
 
-let navbar = fs
-  .readFileSync("./public/components/navbar/navbar.html")
-  .toString();
+
 
   const modal = fs
   .readFileSync("./public/components/modal/modal.html")
@@ -10,6 +8,10 @@ let navbar = fs
 
 
 export function renderPage(path, options = {}, isLoggedin) {
+  let navbar = fs
+  .readFileSync("./public/components/navbar/navbar.html")
+  .toString();
+  
   let footer = fs
     .readFileSync("./public/components/footer/footer.html")
     .toString();

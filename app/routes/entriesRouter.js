@@ -20,6 +20,12 @@ entriesRouter.get("/entries/user/:userId", (req, res) => {
   res.status(200).send({ data: entry });
 });
 
+
+entriesRouter.post("/entries", (req, res) => {
+  entries.push({...req.body})
+  res.status(200);
+});
+
 const entries = [
   {
     entriesId: 1,
@@ -30,12 +36,13 @@ const entries = [
         subEntriesId: 1,
         subTitle: `GitHub og git`,
         text: `GitHub er en hostingtjeneste til version kontrol når man udvikler software, det er vigtigt lige at notere sig at git og GitHub ikke er det samm, GitHub er bygget på git som er opensource.  (lidt mere her).
-      GitHub shiner især når der er flere personer om det samme projekt, da det gør det nemt og overskueligt at holde kontrol over kodedelen af projektet, selvom flere arbejder på samme kode.
-      Der findes diverse extensions til GitHub man kan bruge til at eksekvere github kommandoer igennem sin ide, jeg bruger dog terminalen. De mest brugte kommandoer er nok:
-      Git pull (hent en specifik branch ned som man tidligere har forbinde til. Der findes mange kommandoer man kan bruge i forhold til at forbinde til forskellige branches)
-      Git add -A (tilføj ændringer til staging, her kan man bruge -A for at tilføje alle ændringer i hele ens ”arbejdstræ” eller og kan man vælge en specific fil”
-      Git commit -m besked (man tilføjer de ændringer man har staged, man kan tilføje en besked efter -m. Der findes yderligere kommandoer man kan bruge hvis man fx har meget på hjertet, da -m mere er en overskrift)
-      Git push (man skubber sine lokale ændringer på den branch man er inde i til en remote branch)
+        GitHub shiner især når der er flere personer om det samme projekt, da det gør det nemt og overskueligt at holde kontrol over kodedelen af projektet, selvom flere arbejder på samme kode.
+        Der findes diverse extensions til GitHub man kan bruge til at eksekvere github kommandoer igennem sin ide, jeg bruger dog terminalen. De mest brugte kommandoer er nok:
+        •	Git pull (hent en specifik branch ned som man tidligere har forbinde til. Der findes mange kommandoer man kan bruge i forhold til at forbinde til forskellige branches)
+        •	Git add -A (tilføj ændringer til staging, her kan man bruge -A for at tilføje alle ændringer i hele ens ”arbejdstræ” eller og kan man vælge en specific fil”
+        •	Git commit -m besked (man tilføjer de ændringer man har staged, man kan tilføje en besked efter -m. Der findes yderligere kommandoer man kan bruge hvis man fx har meget på hjertet, da -m mere er en overskrift)
+        •	Git push (man skubber sine lokale ændringer på den branch man er inde i til en remote branch)
+        
       `,
       },
       {

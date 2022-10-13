@@ -14,3 +14,27 @@
       </div>
     </div>
   </div>
+
+    <!-- Modal -->
+    <div class="modal fade h-75" id="myModalNewEntry" tabindex="-1" aria-labelledby="myModalLabelNewEntry" aria-hidden="true">
+      <div class="modal-dialog modal modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModallLabelNewEntry">Tilføj ny sektion</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modalBody">
+            <div class="container">
+            <div class="row m-1">
+              <label for="newInputTitle">Navn</label>
+              <input id="newInputTitle" name="newInputTitle" type="text">
+            </div>
+            <div class="row m-1">
+              <button type="button" id="addEntryButton" class="btn btn-primary" data-bs-toggle="modal", data-bs-target="#myModalNewEntry">Opret ny</button>
+            </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
