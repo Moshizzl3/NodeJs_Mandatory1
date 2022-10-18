@@ -48,7 +48,7 @@ app.get("/login", (req, res) => {
     },
     false
   );
-  res.send(page);
+  res.redirect(page);
 });
 
 const server = app.listen(PORT, (error) => {

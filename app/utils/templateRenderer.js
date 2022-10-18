@@ -5,8 +5,7 @@ const modal = fs
   .toString();
 
 export function renderPage(path, options = {}, isLoggedin) {
-  fs.readFileSync("./public/components/navbar/navbar.css").toString();
-
+  
   let navbar = fs
     .readFileSync("./public/components/navbar/navbar.html")
     .toString();
