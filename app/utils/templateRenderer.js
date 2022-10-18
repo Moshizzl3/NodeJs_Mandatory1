@@ -1,17 +1,16 @@
 import fs from "fs";
 
-
-
-  const modal = fs
+const modal = fs
   .readFileSync("./public/components/modal/modal.html")
   .toString();
 
-
 export function renderPage(path, options = {}, isLoggedin) {
+  fs.readFileSync("./public/components/navbar/navbar.css").toString();
+
   let navbar = fs
-  .readFileSync("./public/components/navbar/navbar.html")
-  .toString();
-  
+    .readFileSync("./public/components/navbar/navbar.html")
+    .toString();
+
   let footer = fs
     .readFileSync("./public/components/footer/footer.html")
     .toString();
@@ -29,6 +28,6 @@ export function renderPage(path, options = {}, isLoggedin) {
   footer = footer.replace("%%PAGE_SCRIPT%%", options.PAGE_SCRIPT || "");
 
   if (isLoggedin) {
-    return navbar + page + modal+ footer;
+    return navbar + page + modal + footer;
   } else return page + footer;
 }

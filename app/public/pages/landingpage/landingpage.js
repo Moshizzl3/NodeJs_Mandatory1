@@ -1,5 +1,4 @@
 
-
 const navBarContainer = document.getElementById("navContainer");
 const sidePanelDiv = document.getElementById("sidePanel");
 const contentPanelDiv = document.getElementById("contentPanel");
@@ -7,6 +6,8 @@ const modalDiv = document.getElementById("modalBody");
 const myModallLabel = document.getElementById("myModallLabel");
 const newEntryModal = document.getElementById("myModallLabelNewEntry");
 const addEntryButton = document.getElementById("addEntryButton");
+let addSubEntryButton = document.querySelector(".addSubEntryButtonModal");
+const searchBarButton = document.getElementById("searchbarButton");
 
 //check if a user is logged in
 if (sessionStorage.getItem("userId")) {
@@ -16,34 +17,130 @@ if (sessionStorage.getItem("userId")) {
 }
 
 async function getEntries() {
+  sidePanelDiv.innerHTML = "";
+
+  //boostrap row for button
+  const divTagRowButton = document.createElement("div");
+  divTagRowButton.classList.add("row", "m-1", "contentRowButton");
+
+  //bootstrap button
+  const buttonTag = document.createElement("button");
+  buttonTag.type = "button";
+  buttonTag.id = "addEntryButtonModal";
+  buttonTag.classList.add("btn", "btn-primary");
+  buttonTag.setAttribute("data-bs-toggle", "modal");
+  buttonTag.setAttribute("data-bs-target", "#myModalNewEntry");
+  buttonTag.textContent = "Opret ny";
+
+  //add botton to rown
+  divTagRowButton.appendChild(buttonTag);
+  sidePanelDiv.appendChild(divTagRowButton);
+
   const response = await fetch(
     `/entries/user/${sessionStorage.getItem("userId")}`
   );
   const data = await response.json();
 
   data.data.forEach((entry) => {
+    const rowDiv = document.createElement("div");
+    rowDiv.classList.add("container", "d-flex");
+
     const hTag = document.createElement("p");
     hTag.classList.add("border", "entryClick", "rounded");
-    hTag.id = entry.entriesId;
     hTag.textContent = entry.title;
-    sidePanelDiv.appendChild(hTag);
 
     hTag.addEventListener("click", () => fillContentPanel(entry));
+    sidePanelDiv.append(hTag);
   });
 }
 
 function fillContentPanel(entry) {
   contentPanelDiv.innerHTML = "";
+
+  console.log(entry);
+  //boostrap row for button
+  const divTagRowButton = document.createElement("div");
+  divTagRowButton.classList.add("row", "m-1", "contentRowButton");
+  const hTagTitle = document.createElement("h3");
+  hTagTitle.setAttribute("contentEditable", true);
+  hTagTitle.id = "entryTitle";
+  hTagTitle.classList.add("text-center");
+  hTagTitle.textContent = entry.title;
+  hTagTitle.addEventListener("blur", () => {
+    editEntry(entry);
+  });
+
+  divTagRowButton.appendChild(hTagTitle);
+
+  //delete button
+  const buttonTagDelete = document.createElement("button");
+  buttonTagDelete.type = "button";
+  buttonTagDelete.id = entry.entriesId;
+  buttonTagDelete.textContent = "slet";
+  buttonTagDelete.classList.add("btn", "btn-primary", "m-2", "rounded-pill");
+  contentPanelDiv.appendChild(buttonTagDelete);
+  buttonTagDelete.addEventListener("click", () => {
+    console.log("heello");
+    fetch(`entries/${entry.entriesId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-typee": "application/json",
+      },
+    }).then(getEntries());
+    contentPanelDiv.innerHTML = "";
+  });
+
+  //bootstrap button
+  const buttonTag = document.createElement("button");
+  buttonTag.type = "button";
+  buttonTag.id = `addSubEntryButton`;
+  buttonTag.classList.add("btn", "btn-primary", "mt-2");
+  buttonTag.setAttribute("data-bs-toggle", "modal");
+  buttonTag.setAttribute("data-bs-target", "#myModalNewSubEntry");
+  buttonTag.textContent = "Opret ny";
+
+  //add botton to rown
+  divTagRowButton.appendChild(buttonTag);
+  contentPanelDiv.appendChild(divTagRowButton);
+
   entry.subEntries.forEach((subentry) => {
+    //delete button
+    const buttonTagDelete = document.createElement("button");
+    buttonTagDelete.type = "button";
+    buttonTagDelete.id = subentry.subEntriesId;
+    buttonTagDelete.textContent = "slet";
+    buttonTagDelete.classList.add("btn", "btn-primary", "m-2", "rounded-pill");
+    buttonTagDelete.addEventListener("click", () => {
+      console.log("heello");
+      fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-typee": "application/json",
+        },
+      })
+      getEntries()
+    });
     //title
     const pTagTitle = document.createElement("p");
     pTagTitle.classList.add("contentTitle");
     pTagTitle.textContent = subentry.subTitle;
+    pTagTitle.id = `entrySubTitle${subentry.subEntriesId}`;
+    pTagTitle.setAttribute("contentEditable", true);
+    pTagTitle.addEventListener("blur", () => {
+      console.log("inside titlte");
+      editSubEntry(entry.entriesId, subentry);
+    });
 
     //text
-    const pTagText = document.createElement("text");
-    pTagText.classList.add("contentText");
+    const pTagText = document.createElement("p");
+    pTagText.classList.add("contentText", "w-100");
     pTagText.textContent = subentry.text;
+    pTagText.id = `entrySubText${subentry.subEntriesId}`;
+    pTagText.setAttribute("contentEditable", true);
+    pTagText.addEventListener("blur", () => {
+      console.log("inside test");
+      editSubEntry(entry.entriesId, subentry);
+    });
 
     //boostrap row
     const divTagRow = document.createElement("div");
@@ -62,6 +159,7 @@ function fillContentPanel(entry) {
 
     divTagRow.appendChild(divTagContainer);
 
+    divTagContainer.appendChild(buttonTagDelete);
     divTagContainer.appendChild(pTagTitle);
     divTagContainer.appendChild(pTagText);
 
@@ -81,6 +179,55 @@ function fillContentPanel(entry) {
     }
     contentPanelDiv.appendChild(divTagRow);
   });
+  addSubEntryButton.id = entry.entriesId;
+}
+
+function appendContentPanel(subentry) {
+  //title
+  const pTagTitle = document.createElement("p");
+  pTagTitle.classList.add("contentTitle");
+  pTagTitle.textContent = subentry.subTitle;
+
+  //text
+  const pTagText = document.createElement("text");
+  pTagText.classList.add("contentText");
+  pTagText.textContent = subentry.text;
+
+  //boostrap row
+  const divTagRow = document.createElement("div");
+  divTagRow.classList.add(
+    "row",
+    "border",
+    "rounded",
+    "mt-4",
+    "m-2",
+    "contentRow"
+  );
+
+  //boststrap container
+  const divTagContainer = document.createElement("div");
+  divTagContainer.classList.add("container");
+
+  divTagRow.appendChild(divTagContainer);
+
+  divTagContainer.appendChild(pTagTitle);
+  divTagContainer.appendChild(pTagText);
+
+  //create image if there is an imageurl
+  if (subentry.hasOwnProperty("imageUrl")) {
+    const imageTag = document.createElement("img");
+    imageTag.setAttribute("data-bs-toggle", "modal");
+    imageTag.setAttribute("data-bs-target", "#myModal");
+    imageTag.classList.add("img-fluid", "mx-auto", "d-block", "w-75");
+    imageTag.src = subentry.imageUrl;
+    divTagRow.appendChild(imageTag);
+
+    //modal for bigger image
+    imageTag.addEventListener("click", () => {
+      fillModal(subentry, imageTag);
+    });
+  }
+  contentPanelDiv.appendChild(divTagRow);
 }
 
 function fillModal(data, element) {
@@ -90,32 +237,100 @@ function fillModal(data, element) {
   modalDiv.appendChild(element.cloneNode());
 }
 
-async function addNewEntry() {
-  const newEntryName = document.getElementById("newInputTitle");
-
+function addNewEntry() {
   const entry = {
-    entriesId: 1,
-    title: "Uge 35",
-    userId: 1,
-    subEntries: [
-      {
-        subEntriesId: 1,
-        subTitle: "GitHub og git",
-        text: "",
-      },
-    ],
+    entriesId: null,
+    title: document.getElementById("newEntryTitle").value,
+    userId: Number(sessionStorage.getItem("userId")),
+    subEntries: [],
   };
 
-  const response = await fetch("/entries", {
+  const hTag = document.createElement("p");
+  hTag.classList.add("border", "entryClick", "rounded");
+  hTag.textContent = entry.title;
+  sidePanelDiv.appendChild(hTag);
+  hTag.addEventListener("click", () => fillContentPanel(entry));
+
+  const response = fetch("/entries", {
     method: "POST",
     headers: { "Content-type": "application/json" },
-    body: JSON.stringify(entry)
-  });
+    body: JSON.stringify(entry),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      entry.entriesId = data.newEntry.entriesId;
+      console.log(entry);
+    })
+    .catch((err) => console.log(err));
+}
+function addNewSubEntry(id) {
+  const newSubEntry = {
+    subEntriesId: 9,
+    subTitle: document.getElementById("newSubEntryTitle").value,
+    text: "",
+  };
 
-  if (response.ok){
-    console.log("response ok")
-  }
+  const response = fetch(`/entries/${id}`, {
+    method: "PATCH",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(newSubEntry),
+  }).catch((err) => console.log(err));
 
+  appendContentPanel(newSubEntry);
+  getEntries();
 }
 
-addEntryButton.addEventListener("click",  ()=>  addNewEntry().then(getEntries()));
+function editEntry(entry) {
+  const newTitle = document.getElementById("entryTitle");
+  entry.title = newTitle.textContent;
+  console.log(entry);
+
+  const response = fetch(`/entries/${entry.entriesId}`, {
+    method: "PATCH",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(entry),
+  }).catch((err) => console.log(err));
+
+  getEntries();
+}
+
+function editSubEntry(id, subentry) {
+  const newSubEntry = {
+    subEntriesId: subentry.subEntriesId,
+    subTitle: document.getElementById(`entrySubTitle${subentry.subEntriesId}`)
+      .textContent,
+    text: document.getElementById(`entrySubText${subentry.subEntriesId}`)
+      .textContent,
+  };
+
+  fetch(`/entries/${id}/${subentry.subEntriesId}`, {
+    method: "PATCH",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(newSubEntry),
+  });
+  getEntries();
+}
+
+function searchForEntries() {
+  const searchString = document.getElementById("searchInput");
+
+  fetch(`entries/search/${searchString.value}`).then((response) =>
+    response.json().then((data) => {
+      contentPanelDiv.innerHTML = ""
+      data.data.forEach(subentry =>{
+        appendContentPanel(subentry)
+      })
+    })
+  );
+
+  console.log(searchString.value);
+}
+
+addEntryButton.addEventListener("click", () => addNewEntry());
+addSubEntryButton.addEventListener("click", (e) => {
+  addNewSubEntry(e.target.id);
+});
+
+searchBarButton.addEventListener("click", () => {
+  searchForEntries();
+});

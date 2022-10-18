@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-export const entriesRouter = Router();
+const entriesRouter = Router();
 
 entriesRouter.get("/entries", (req, res) => {
   res.status(200).send({ data: entries });
@@ -13,6 +13,22 @@ entriesRouter.get("/entries/:id", (req, res) => {
   res.status(200).send({ data: entry });
 });
 
+entriesRouter.get("/entries/search/:searchString", (req, res) => {
+  const wordsFromString = req.params.searchString.split(" ");
+  const matchedEntries = [];
+
+  entries.forEach((entry) => {
+    wordsFromString.forEach((word) => {
+      entry.subEntries.forEach((subEntry) => {
+        if (subEntry.text.toLowerCase().includes(word.toLowerCase())) {
+          matchedEntries.push(subEntry);
+        }
+      });
+    });
+  });
+  console.log(wordsFromString);
+  res.status(200).send({ data: matchedEntries });
+});
 entriesRouter.get("/entries/user/:userId", (req, res) => {
   const entry = entries.filter(
     (entry) => entry.userId === Number(req.params.userId)
@@ -20,13 +36,93 @@ entriesRouter.get("/entries/user/:userId", (req, res) => {
   res.status(200).send({ data: entry });
 });
 
-
 entriesRouter.post("/entries", (req, res) => {
-  entries.push({...req.body})
-  res.status(200);
+  const newEntry = { ...req.body };
+  newEntry.entriesId = ++entriesIdCounter;
+  console.log(newEntry.entriesId);
+  newEntry.userId = Number(newEntry.userId);
+  entries.push(newEntry);
+  res.status(200).send({ newEntry });
 });
 
-const entries = [
+entriesRouter.patch("/entries/:id", (req, res) => {
+  const entryId = Number(req.params.id);
+  let entry = entries.find((entry) => entry.entriesId == entryId);
+
+  let body = { ...req.body };
+  if (entry) {
+    //spread operater doesnt work, ask anders why
+    entry.subEntries.push(body);
+    for (let i in body) {
+      if (body[i]) {
+        entry[i] = body[i];
+      }
+    }
+    res.status(200).send("Entry has been updated");
+  } else {
+    res.status(404).send("No entry was found");
+  }
+});
+
+entriesRouter.patch("/entries/:entryId/:subEndtryId", (req, res) => {
+  const entryId = Number(req.params.entryId);
+  const subEntryId = Number(req.params.subEndtryId);
+  let entry = entries.find((entry) => entry.entriesId == entryId);
+
+  let body = { ...req.body };
+
+  if (entry) {
+    const index = entry.subEntries.findIndex(
+      (subEntry) => subEntry.subEntriesId === subEntryId
+    );
+    if (index >= 0) {
+      entry.subEntries[index] = body;
+
+      console.log(entryId, subEntryId);
+
+      res.status(200).send(entry);
+    } else res.status(404);
+  } else {
+    res.status(404).send("Not Found");
+  }
+});
+
+//delete entry
+entriesRouter.delete("/entries/:entryId/", (req, res) => {
+  const entryId = Number(req.params.entryId);
+
+  if (entries.some((entry) => entry.entriesId === entryId)) {
+    entries = entries.filter((entry) => entry.entriesId !== entryId);
+    res.status(200).send("deleted");
+  } else {
+    res.status(404).send("Not found");
+  }
+});
+
+//delete sub entry
+entriesRouter.delete("/entries/:entryId/:subEntryId", (req, res) => {
+  const entryId = Number(req.params.entryId);
+  const subEntryId = Number(req.params.subEntryId);
+
+  const entry = entries.find((entry) => entry.entriesId === entryId);
+  if (entry) {
+    const index = entry.subEntries.findIndex(
+      (subEntry) => subEntry.subEntriesId === subEntryId
+    );
+    if (index >= 0) {
+      const test = entry.subEntries.splice(index, 1);
+      console.log(test);
+
+      console.log(entryId, subEntryId);
+
+      res.status(200).send({ data: entries });
+    } else res.status(404);
+  } else {
+    res.status(404).send("Not Found");
+  }
+});
+
+let entries = [
   {
     entriesId: 1,
     title: "Uge 35",
@@ -94,7 +190,7 @@ const entries = [
   },
   {
     entriesId: 2,
-    title: "No 2",
+    title: "Uge 36",
     userId: 1,
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text2 for subtitle 1" },
@@ -104,8 +200,48 @@ const entries = [
   },
   {
     entriesId: 3,
-    title: "No 3",
-    userId: 2,
+    title: "Uge 37",
+    userId: 1,
+    subEntries: [
+      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
+      { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
+      { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
+    ],
+  },
+  {
+    entriesId: 4,
+    title: "Uge 38",
+    userId: 1,
+    subEntries: [
+      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
+      { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
+      { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
+    ],
+  },
+  {
+    entriesId: 5,
+    title: "Uge 39",
+    userId: 1,
+    subEntries: [
+      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
+      { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
+      { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
+    ],
+  },
+  {
+    entriesId: 6,
+    title: "Uge 40",
+    userId: 1,
+    subEntries: [
+      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
+      { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
+      { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
+    ],
+  },
+  {
+    entriesId: 7,
+    title: "Uge 41",
+    userId: 1,
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
@@ -113,3 +249,7 @@ const entries = [
     ],
   },
 ];
+
+let entriesIdCounter = Math.max(...entries.map((entry) => entry.entriesId));
+
+export default entriesRouter

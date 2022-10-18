@@ -1,7 +1,9 @@
-.navBarContainer1 {
+body{
+    background-color: rgba(100, 202, 155, 0.8);
+}
 
+.navBarContainer1 {
     background-color: rgba(95, 63, 160, 0.6);
-    
 }
 
 .searchButton{

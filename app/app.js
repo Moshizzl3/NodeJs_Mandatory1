@@ -1,7 +1,7 @@
 import express from "express";
-import { entriesRouter } from "./routes/entriesRouter.js";
-import { userRouter } from "./routes/usersRouter.js";
-import { renderPage } from "./utils/templateRenderer.js";
+import entriesRouter  from "./routes/entriesRouter.js";
+import userRouter from "./routes/usersRouter.js";
+import {renderPage} from "./utils/templateRenderer.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +19,19 @@ app.get("/", (req, res) => {
       tabTitle: "Notepad",
       PAGE_SCRIPT: `<script src="/pages/landingpage/landingpage.js"></script>`,
       PAGE_STYLESHEET: `<link rel="stylesheet" href="/pages/landingpage/landingpage.css">`,
+    },
+    true
+  );
+  res.send(page);
+});
+
+app.get("/admin", (req, res) => {
+  const page = renderPage(
+    "./public/pages/admin/admin.html",
+    {
+      tabTitle: "Admin",
+      PAGE_SCRIPT: `<script src="/pages/admin/admin.js"></script>`,
+      PAGE_STYLESHEET: `<link rel="stylesheet" href="/pages/admin/admin.css">`,
     },
     true
   );

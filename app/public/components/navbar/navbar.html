@@ -25,11 +25,13 @@
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                           <li class="nav-item">
                             <a class="nav-link active" aria-current="page" id="logoutLink" href="/login">Logout</a>
+                            <li class="nav-item">
+                              <a class="nav-link active" aria-current="page" id="adminlink" href="/admin">admin</a>
                         </ul>
-                        <form class="d-flex">
-                          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                          <button class="btn btn-outline-success searchButton" type="submit">Search</button>
-                        </form>
+                        <div class="d-flex">
+                          <input class="form-control me-2"  id="searchInput" type="search" placeholder="Search" aria-label="Search">
+                          <button class="btn btn-outline-success searchButton" id="searchbarButton">Search</button>
+                        </div>
                       </div>
                     </div>
                   </nav>

@@ -1,6 +1,6 @@
 <!-- Button trigger modal -->
   
-  <!-- Modal -->
+  <!-- Image Modal -->
   <div class="modal fade h-75" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-    <!-- Modal -->
+    <!--New Entry Modal -->
     <div class="modal fade h-75" id="myModalNewEntry" tabindex="-1" aria-labelledby="myModalLabelNewEntry" aria-hidden="true">
       <div class="modal-dialog modal modal-dialog-centered">
         <div class="modal-content">
@@ -26,15 +26,43 @@
           <div class="modal-body" id="modalBody">
             <div class="container">
             <div class="row m-1">
-              <label for="newInputTitle">Navn</label>
-              <input id="newInputTitle" name="newInputTitle" type="text">
+              <label for="newEntryTitle">Navn</label>
+              <input id="newEntryTitle" name="newEntryTitle" type="text">
             </div>
+
             <div class="row m-1">
               <button type="button" id="addEntryButton" class="btn btn-primary" data-bs-toggle="modal", data-bs-target="#myModalNewEntry">Opret ny</button>
             </div>
+
             </div>
             
           </div>
         </div>
       </div>
     </div>
+
+        <!--New SubEntry Modal -->
+        <div class="modal fade h-75" id="myModalNewSubEntry" tabindex="-1" aria-labelledby="myModalNewSubEntry" aria-hidden="true">
+          <div class="modal-dialog modal modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabelNewSubEntry">Tilføj ny sektion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="modalBody">
+                <div class="container">
+                <div class="row m-1">
+                  <label for="newSubEntryTitle">Navn</label>
+                  <input id="newSubEntryTitle" name="newSubEntryTitle" type="text">
+                </div>
+    
+                <div class="row m-1">
+                  <button type="button" id="" class="btn btn-primary addSubEntryButtonModal" data-bs-toggle="modal", data-bs-target="#myModalNewSubEntry">Oprett ny</button>
+                </div>
+                
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
