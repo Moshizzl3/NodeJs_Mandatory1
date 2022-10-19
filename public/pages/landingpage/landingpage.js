@@ -27,7 +27,7 @@ async function getEntries() {
   const buttonTag = document.createElement("button");
   buttonTag.type = "button";
   buttonTag.id = "addEntryButtonModal";
-  buttonTag.classList.add("btn", "btn-primary");
+  buttonTag.classList.add("btn", "addButton");
   buttonTag.setAttribute("data-bs-toggle", "modal");
   buttonTag.setAttribute("data-bs-target", "#myModalNewEntry");
   buttonTag.textContent = "Opret ny";
@@ -73,12 +73,15 @@ function fillContentPanel(entry) {
   divTagRowButton.appendChild(hTagTitle);
 
   //delete button
+  const divTagRowButtonDelete = document.createElement("div");
+  divTagRowButtonDelete.classList.add("row", "m-1", "contentRowButton","justify-content-end");
   const buttonTagDelete = document.createElement("button");
   buttonTagDelete.type = "button";
   buttonTagDelete.id = entry.entriesId;
   buttonTagDelete.textContent = "slet";
-  buttonTagDelete.classList.add("btn", "btn-primary", "m-2", "rounded-pill");
-  contentPanelDiv.appendChild(buttonTagDelete);
+  buttonTagDelete.classList.add("btn", "m-2", "rounded-pill", "col-1",  "deleteButton");
+  divTagRowButtonDelete.appendChild(buttonTagDelete);
+  contentPanelDiv.append(divTagRowButtonDelete)
   buttonTagDelete.addEventListener("click", () => {
     console.log("heello");
     fetch(`entries/${entry.entriesId}`, {
@@ -94,7 +97,7 @@ function fillContentPanel(entry) {
   const buttonTag = document.createElement("button");
   buttonTag.type = "button";
   buttonTag.id = `addSubEntryButton`;
-  buttonTag.classList.add("btn", "btn-primary", "mt-2");
+  buttonTag.classList.add("btn", "mt-2", "addButton");
   buttonTag.setAttribute("data-bs-toggle", "modal");
   buttonTag.setAttribute("data-bs-target", "#myModalNewSubEntry");
   buttonTag.textContent = "Opret ny";
@@ -106,10 +109,12 @@ function fillContentPanel(entry) {
   entry.subEntries.forEach((subentry) => {
     //delete button
     const buttonTagDelete = document.createElement("button");
+    const divTagRowButtonDelete = document.createElement("div");
+    divTagRowButtonDelete.classList.add("row", "m-1", "contentRowButton","justify-content-end");
     buttonTagDelete.type = "button";
     buttonTagDelete.id = subentry.subEntriesId;
     buttonTagDelete.textContent = "slet";
-    buttonTagDelete.classList.add("btn", "btn-primary", "m-2", "rounded-pill");
+    buttonTagDelete.classList.add("btn", "btn", "m-2", "rounded-pill", "deleteButton", "col-1");
     buttonTagDelete.addEventListener("click", () => {
       console.log("heello");
       fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {
@@ -120,6 +125,7 @@ function fillContentPanel(entry) {
       })
       getEntries()
     });
+    divTagRowButtonDelete.appendChild(buttonTagDelete)
     //title
     const pTagTitle = document.createElement("p");
     pTagTitle.classList.add("contentTitle");
@@ -159,7 +165,7 @@ function fillContentPanel(entry) {
 
     divTagRow.appendChild(divTagContainer);
 
-    divTagContainer.appendChild(buttonTagDelete);
+    divTagContainer.appendChild(divTagRowButtonDelete);
     divTagContainer.appendChild(pTagTitle);
     divTagContainer.appendChild(pTagText);
 

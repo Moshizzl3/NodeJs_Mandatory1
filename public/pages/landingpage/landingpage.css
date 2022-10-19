@@ -31,3 +31,16 @@
 .entryClick:hover{
     background-color: rgb(214, 208, 208);
 }
+.deleteButton{
+    background-color: rgba(209, 142, 142, 0.9);
+}
+.deleteButton:hover{
+    background-color: rgb(223, 132, 132);
+}
+
+.addButton{
+    background-color: rgb(162, 121, 201);
+}
+.addButton:hover{
+    background-color: rgb(147, 89, 202);
+}
