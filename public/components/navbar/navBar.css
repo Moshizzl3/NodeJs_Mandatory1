@@ -4,6 +4,7 @@ body{
 
 .navBarContainer1 {
     background-color: rgba(95, 63, 160, 0.6);
+    box-shadow: 5px 5px 10px rgb(128, 123, 123);
 }
 
 .searchButton{
@@ -12,4 +13,11 @@ body{
 
 .navbar{
     z-index: 2;
+
+  }
+
+  .nav-link:hover{
+   background-color: rgba(95, 63, 160, 0.2);
+   
+
   }

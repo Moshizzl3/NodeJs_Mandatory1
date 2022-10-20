@@ -2,3 +2,6 @@
 .loginContent{
     height: 65vh;
 }
+#wrongPassword{
+    color: rgb(203, 58, 58);
+}

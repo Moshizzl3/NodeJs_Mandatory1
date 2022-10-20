@@ -55,4 +55,8 @@
 }
 .trashIcon{
     font-size: 20px;
+    padding-top: 10px;
+}
+.trashIcon:hover{
+ color: rgb(96, 39, 37);
 }

@@ -185,7 +185,7 @@ function appendContentPanel(entry, subentry) {
     "row",
     "border",
     "rounded",
-    "mt-4",
+    "mt-2",
     "m-2",
     "contentRow"
   );
@@ -250,6 +250,7 @@ function addNewEntry() {
       console.log(entry);
     })
     .catch((err) => console.log(err));
+    document.getElementById("newEntryTitle").value = ""
 }
 function addNewSubEntry(entry) {
   const newSubEntry = {
@@ -266,6 +267,7 @@ function addNewSubEntry(entry) {
 
   appendContentPanel(entry, newSubEntry);
   getEntries();
+  document.getElementById("newSubEntryTitle").value = ""
 }
 
 function editEntry(entry) {
@@ -310,8 +312,6 @@ function searchForEntries() {
       });
     })
   );
-
-  console.log(searchString.value);
 }
 
 addEntryButton.addEventListener("click", () => addNewEntry());

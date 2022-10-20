@@ -18,7 +18,7 @@ async function getDataFromForm() {
     sessionStorage.setItem("userId", data.data);
     window.location.replace("/");
   } else {
-    //TODO add some text to user of wrong input
+   document.getElementById("wrongPassword").textContent = "Forkert email eller password"
   }
 }
 
