@@ -75,11 +75,9 @@ function fillContentPanel(entry) {
   //delete button
   const divTagRowButtonDelete = document.createElement("div");
   divTagRowButtonDelete.classList.add("row", "m-1", "contentRowButton","justify-content-end");
-  const buttonTagDelete = document.createElement("button");
-  buttonTagDelete.type = "button";
+  const buttonTagDelete = document.createElement("i");
   buttonTagDelete.id = entry.entriesId;
-  buttonTagDelete.textContent = "slet";
-  buttonTagDelete.classList.add("btn", "btn-sm", "m-2", "rounded-pill", "col-2",  "deleteButton");
+  buttonTagDelete.classList.add("fa", "fa-solid", "fa-trash", "col-1", "trashIcon");
   divTagRowButtonDelete.appendChild(buttonTagDelete);
   contentPanelDiv.append(divTagRowButtonDelete)
   buttonTagDelete.addEventListener("click", () => {
@@ -108,13 +106,11 @@ function fillContentPanel(entry) {
 
   entry.subEntries.forEach((subentry) => {
     //delete button
-    const buttonTagDelete = document.createElement("button");
+    const buttonTagDelete = document.createElement("i");
     const divTagRowButtonDelete = document.createElement("div");
     divTagRowButtonDelete.classList.add("row", "m-1", "contentRowButton","justify-content-end");
-    buttonTagDelete.type = "button";
     buttonTagDelete.id = subentry.subEntriesId;
-    buttonTagDelete.textContent = "slet";
-    buttonTagDelete.classList.add("btn", "btn-sm", "m-2", "rounded-pill", "deleteButton", "col-2");
+    buttonTagDelete.classList.add("fa", "fa-solid", "fa-trash", "col-1", "trashIcon");
     buttonTagDelete.addEventListener("click", () => {
       console.log("heello");
       fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {
