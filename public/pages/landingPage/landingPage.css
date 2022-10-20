@@ -1,0 +1,23 @@
+.mainContentContainer{
+    height: 76vh;
+
+}
+
+.contentTitle{
+    font-weight: bold;
+    font-size: 115%;
+}
+
+.contentText{
+    white-space: pre-wrap;
+}
+
+.contentRow{
+    background-color:  rgba(102, 197, 197,0.1);
+    padding: 8px;
+}
+
+
+#contentPanel{
+    background-color: whitesmoke;
+}

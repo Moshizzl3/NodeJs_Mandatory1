@@ -15,24 +15,31 @@
 
 .contentRow{
     background-color:  rgba(102, 197, 197,0.1);
+    box-shadow: 5px 5px 5px rgb(128, 123, 123);
     padding: 8px;
 }
 
 
 #contentPanel{
     background-color: whitesmoke;
+    box-shadow: 10px 5px 5px rgb(128, 123, 123);
 }
 #sidePanel{
     background-color: whitesmoke;
+    box-shadow: 5px 2px 2px rgb(128, 123, 123);
+    text-align: center;
 }
 
-
+.entryClick{
+    box-shadow: 2px 2px 2px rgb(128, 123, 123);
+}
 
 .entryClick:hover{
     background-color: rgb(214, 208, 208);
 }
 .deleteButton{
     background-color: rgba(209, 142, 142, 0.9);
+    box-shadow: 5px 5px 5px rgb(128, 123, 123);
 }
 .deleteButton:hover{
     background-color: rgb(223, 132, 132);
@@ -40,6 +47,8 @@
 
 .addButton{
     background-color: rgb(162, 121, 201);
+    box-shadow: 5px 5px 5px rgb(128, 123, 123);
+    margin-bottom: 5px;
 }
 .addButton:hover{
     background-color: rgb(147, 89, 202);

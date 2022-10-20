@@ -27,7 +27,7 @@ async function getEntries() {
   const buttonTag = document.createElement("button");
   buttonTag.type = "button";
   buttonTag.id = "addEntryButtonModal";
-  buttonTag.classList.add("btn", "addButton");
+  buttonTag.classList.add("btn", "addButton", "btn-sm");
   buttonTag.setAttribute("data-bs-toggle", "modal");
   buttonTag.setAttribute("data-bs-target", "#myModalNewEntry");
   buttonTag.textContent = "Opret ny";
@@ -79,7 +79,7 @@ function fillContentPanel(entry) {
   buttonTagDelete.type = "button";
   buttonTagDelete.id = entry.entriesId;
   buttonTagDelete.textContent = "slet";
-  buttonTagDelete.classList.add("btn", "m-2", "rounded-pill", "col-1",  "deleteButton");
+  buttonTagDelete.classList.add("btn", "btn-sm", "m-2", "rounded-pill", "col-2",  "deleteButton");
   divTagRowButtonDelete.appendChild(buttonTagDelete);
   contentPanelDiv.append(divTagRowButtonDelete)
   buttonTagDelete.addEventListener("click", () => {
@@ -97,7 +97,7 @@ function fillContentPanel(entry) {
   const buttonTag = document.createElement("button");
   buttonTag.type = "button";
   buttonTag.id = `addSubEntryButton`;
-  buttonTag.classList.add("btn", "mt-2", "addButton");
+  buttonTag.classList.add("btn", "btn-sm", "mt-2", "addButton");
   buttonTag.setAttribute("data-bs-toggle", "modal");
   buttonTag.setAttribute("data-bs-target", "#myModalNewSubEntry");
   buttonTag.textContent = "Opret ny";
@@ -114,7 +114,7 @@ function fillContentPanel(entry) {
     buttonTagDelete.type = "button";
     buttonTagDelete.id = subentry.subEntriesId;
     buttonTagDelete.textContent = "slet";
-    buttonTagDelete.classList.add("btn", "btn", "m-2", "rounded-pill", "deleteButton", "col-1");
+    buttonTagDelete.classList.add("btn", "btn-sm", "m-2", "rounded-pill", "deleteButton", "col-2");
     buttonTagDelete.addEventListener("click", () => {
       console.log("heello");
       fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {

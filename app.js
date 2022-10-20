@@ -14,11 +14,11 @@ app.use(userRouter);
 
 app.get("/", (req, res) => {
   const page = renderPage(
-    "./public/pages/contentPage/contentPage.html",
+    "./public/pages/landingPage/landingPage.html",
     {
       tabTitle: "Notepad",
-      pageScript: `<script src="/pages/contentPage/contentPage.js"></script>`,
-      pageStylesheet: `<link rel="stylesheet" href="/pages/contentPage/contentPage.css">`,
+      pageScript: `<script src="/pages/landingPage/contlandingPageentPage.js"></script>`,
+      pageStylesheet: `<link rel="stylesheet" href="/pages/landingPage/landingPage.css">`,
     },
     true
   );
