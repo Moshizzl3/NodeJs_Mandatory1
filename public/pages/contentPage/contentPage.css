@@ -22,11 +22,11 @@
 
 #contentPanel{
     background-color: whitesmoke;
-    box-shadow: 10px 5px 5px rgb(128, 123, 123);
+    box-shadow: 5px 5px 5px rgb(128, 123, 123);
 }
 #sidePanel{
     background-color: whitesmoke;
-    box-shadow: 5px 2px 2px rgb(128, 123, 123);
+    box-shadow: 5px 5px 5px rgb(128, 123, 123);
     text-align: center;
 }
 

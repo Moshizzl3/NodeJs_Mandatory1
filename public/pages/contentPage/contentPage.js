@@ -1,4 +1,3 @@
-
 const navBarContainer = document.getElementById("navContainer");
 const sidePanelDiv = document.getElementById("sidePanel");
 const contentPanelDiv = document.getElementById("contentPanel");
@@ -37,7 +36,9 @@ async function getEntries() {
   sidePanelDiv.appendChild(divTagRowButton);
 
   const response = await fetch(
-    `/entries/user/${sessionStorage.getItem("userId")}/${document.title.toLowerCase()}`
+    `/entries/user/${sessionStorage.getItem(
+      "userId"
+    )}/${document.title.toLowerCase()}`
   );
   const data = await response.json();
 
@@ -72,14 +73,25 @@ function fillContentPanel(entry) {
 
   divTagRowButton.appendChild(hTagTitle);
 
-  //delete button
+  //delete entry button
   const divTagRowButtonDelete = document.createElement("div");
-  divTagRowButtonDelete.classList.add("row", "m-1", "contentRowButton","justify-content-end");
+  divTagRowButtonDelete.classList.add(
+    "row",
+    "m-1",
+    "contentRowButton",
+    "justify-content-end"
+  );
   const buttonTagDelete = document.createElement("i");
   buttonTagDelete.id = entry.entriesId;
-  buttonTagDelete.classList.add("fa", "fa-solid", "fa-trash", "col-1", "trashIcon");
+  buttonTagDelete.classList.add(
+    "fa",
+    "fa-solid",
+    "fa-trash",
+    "col-1",
+    "trashIcon"
+  );
   divTagRowButtonDelete.appendChild(buttonTagDelete);
-  contentPanelDiv.append(divTagRowButtonDelete)
+  contentPanelDiv.append(divTagRowButtonDelete);
   buttonTagDelete.addEventListener("click", () => {
     console.log("heello");
     fetch(`entries/${entry.entriesId}`, {
@@ -105,12 +117,23 @@ function fillContentPanel(entry) {
   contentPanelDiv.appendChild(divTagRowButton);
 
   entry.subEntries.forEach((subentry) => {
-    //delete button
+    //delete subentry button
     const buttonTagDelete = document.createElement("i");
     const divTagRowButtonDelete = document.createElement("div");
-    divTagRowButtonDelete.classList.add("row", "m-1", "contentRowButton","justify-content-end");
+    divTagRowButtonDelete.classList.add(
+      "row",
+      "m-1",
+      "contentRowButton",
+      "justify-content-end"
+    );
     buttonTagDelete.id = subentry.subEntriesId;
-    buttonTagDelete.classList.add("fa", "fa-solid", "fa-trash", "col-1", "trashIcon");
+    buttonTagDelete.classList.add(
+      "fa",
+      "fa-solid",
+      "fa-trash",
+      "col-1",
+      "trashIcon"
+    );
     buttonTagDelete.addEventListener("click", () => {
       console.log("heello");
       fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {
@@ -118,10 +141,12 @@ function fillContentPanel(entry) {
         headers: {
           "Content-typee": "application/json",
         },
-      })
-      getEntries()
+      }).then((response) =>
+        response.json().then((data) => fillContentPanel(data.data))
+      );
+      getEntries();
     });
-    divTagRowButtonDelete.appendChild(buttonTagDelete)
+    divTagRowButtonDelete.appendChild(buttonTagDelete);
     //title
     const pTagTitle = document.createElement("p");
     pTagTitle.classList.add("contentTitle");
@@ -243,6 +268,7 @@ function addNewEntry() {
   const entry = {
     entriesId: null,
     title: document.getElementById("newEntryTitle").value,
+    elective: document.title.toLowerCase(),
     userId: Number(sessionStorage.getItem("userId")),
     subEntries: [],
   };
@@ -318,10 +344,10 @@ function searchForEntries() {
 
   fetch(`entries/search/${searchString.value}`).then((response) =>
     response.json().then((data) => {
-      contentPanelDiv.innerHTML = ""
-      data.data.forEach(subentry =>{
-        appendContentPanel(subentry)
-      })
+      contentPanelDiv.innerHTML = "";
+      data.data.forEach((subentry) => {
+        appendContentPanel(subentry);
+      });
     })
   );
 

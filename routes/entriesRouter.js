@@ -29,6 +29,7 @@ entriesRouter.get("/entries/search/:searchString", (req, res) => {
   console.log(wordsFromString);
   res.status(200).send({ data: matchedEntries });
 });
+
 entriesRouter.get("/entries/user/:userId/:elective", (req, res) => {
   const entry = entries.filter(
     (entry) =>
@@ -117,7 +118,7 @@ entriesRouter.delete("/entries/:entryId/:subEntryId", (req, res) => {
 
       console.log(entryId, subEntryId);
 
-      res.status(200).send({ data: entries });
+      res.status(200).send({ data: entry });
     } else res.status(404);
   } else {
     res.status(404).send("Not Found");
