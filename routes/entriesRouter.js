@@ -29,9 +29,11 @@ entriesRouter.get("/entries/search/:searchString", (req, res) => {
   console.log(wordsFromString);
   res.status(200).send({ data: matchedEntries });
 });
-entriesRouter.get("/entries/user/:userId", (req, res) => {
+entriesRouter.get("/entries/user/:userId/:elective", (req, res) => {
   const entry = entries.filter(
-    (entry) => entry.userId === Number(req.params.userId)
+    (entry) =>
+      entry.userId === Number(req.params.userId) &&
+      entry.elective.toLowerCase() === req.params.elective.toLowerCase()
   );
   res.status(200).send({ data: entry });
 });
@@ -127,6 +129,7 @@ let entries = [
     entriesId: 1,
     title: "Uge 35",
     userId: 1,
+    elective: "NodeJs",
     subEntries: [
       {
         subEntriesId: 1,
@@ -192,6 +195,7 @@ let entries = [
     entriesId: 2,
     title: "Uge 36",
     userId: 1,
+    elective: "NodeJs",
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text2 for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
@@ -202,6 +206,7 @@ let entries = [
     entriesId: 3,
     title: "Uge 37",
     userId: 1,
+    elective: "NodeJs",
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
@@ -212,6 +217,7 @@ let entries = [
     entriesId: 4,
     title: "Uge 38",
     userId: 1,
+    elective: "NodeJs",
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
@@ -222,6 +228,7 @@ let entries = [
     entriesId: 5,
     title: "Uge 39",
     userId: 1,
+    elective: "NodeJs",
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
@@ -232,6 +239,7 @@ let entries = [
     entriesId: 6,
     title: "Uge 40",
     userId: 1,
+    elective: "NodeJs",
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
@@ -242,14 +250,29 @@ let entries = [
     entriesId: 7,
     title: "Uge 41",
     userId: 1,
+    elective: "NodeJs",
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
       { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
     ],
   },
+  {
+    entriesId: 7,
+    title: "Uge 41",
+    userId: 1,
+    elective: "Python",
+    subEntries: [
+      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
+      { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
+      { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
+    ],
+  },
+
 ];
+
+
 
 let entriesIdCounter = Math.max(...entries.map((entry) => entry.entriesId));
 
-export default entriesRouter
+export default entriesRouter;

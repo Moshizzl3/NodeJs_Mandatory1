@@ -14,11 +14,39 @@ app.use(userRouter);
 
 app.get("/", (req, res) => {
   const page = renderPage(
-    "./public/pages/landingpage/landingpage.html",
+    "./public/pages/contentPage/contentPage.html",
     {
       tabTitle: "Notepad",
-      PAGE_SCRIPT: `<script src="/pages/landingpage/landingpage.js"></script>`,
-      PAGE_STYLESHEET: `<link rel="stylesheet" href="/pages/landingpage/landingpage.css">`,
+      pageScript: `<script src="/pages/contentPage/contentPage.js"></script>`,
+      pageStylesheet: `<link rel="stylesheet" href="/pages/contentPage/contentPage.css">`,
+    },
+    true
+  );
+  res.send(page);
+});
+
+
+
+app.get("/python", (req, res) => {
+  const page = renderPage(
+    "./public/pages/contentPage/contentPage.html",
+    {
+      tabTitle: "Python",
+      pageScript: `<script src="/pages/contentPage/contentPage.js"></script>`,
+      pageStylesheet: `<link rel="stylesheet" href="/pages/contentPage/contentPage.css">`,
+    },
+    true
+  );
+  res.send(page);
+});
+
+app.get("/nodejs", (req, res) => {
+  const page = renderPage(
+    "./public/pages/contentPage/contentPage.html",
+    {
+      tabTitle: "NodeJs",
+      pageScript: `<script src="/pages/contentPage/contentPage.js"></script>`,
+      pageStylesheet: `<link rel="stylesheet" href="/pages/contentPage/contentPage.css">`,
     },
     true
   );
@@ -27,11 +55,11 @@ app.get("/", (req, res) => {
 
 app.get("/admin", (req, res) => {
   const page = renderPage(
-    "./public/pages/admin/admin.html",
+    "./public/pages/adminPage/adminPage.html",
     {
       tabTitle: "Admin",
-      PAGE_SCRIPT: `<script src="/pages/admin/admin.js"></script>`,
-      PAGE_STYLESHEET: `<link rel="stylesheet" href="/pages/admin/admin.css">`,
+      pageScript: `<script src="/pages/adminPahe/adminPage.js"></script>`,
+      pageStylesheet: `<link rel="stylesheet" href="/pages/adminPage/adminPage.css">`,
     },
     true
   );
@@ -40,11 +68,11 @@ app.get("/admin", (req, res) => {
 
 app.get("/login", (req, res) => {
   const page = renderPage(
-    "./public/pages/login/login.html",
+    "./public/pages/loginPage/loginPage.html",
     {
-      PAGE_SCRIPT: `<script src="/pages/login/login.js"></script>`,
+      pageScript: `<script src="/pages/loginPage/loginPage.js"></script>`,
       tabTitle: "Login",
-      PAGE_STYLESHEET: `<link rel="stylesheet" href="/pages/login/login.css">`,
+      pageStylesheet: `<link rel="stylesheet" href="/pages/loginPage/loginPage.css">`,
     },
     false
   );

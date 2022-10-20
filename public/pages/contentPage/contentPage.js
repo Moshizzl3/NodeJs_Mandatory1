@@ -37,7 +37,7 @@ async function getEntries() {
   sidePanelDiv.appendChild(divTagRowButton);
 
   const response = await fetch(
-    `/entries/user/${sessionStorage.getItem("userId")}`
+    `/entries/user/${sessionStorage.getItem("userId")}/${document.title.toLowerCase()}`
   );
   const data = await response.json();
 
