@@ -2,6 +2,11 @@ const colorPicker = document.getElementById("ColorInput")
 const colorButton = document.getElementById("colorButton")
 
 
+if (!sessionStorage.getItem("userId")) {
+  window.location.replace("/login");
+}
+
+
 
 colorButton.addEventListener('click', ()=> {
   console.log(colorPicker.value)

@@ -21,7 +21,9 @@ entriesRouter.get("/entries/search/:searchString", (req, res) => {
     wordsFromString.forEach((word) => {
       entry.subEntries.forEach((subEntry) => {
         if (subEntry.text.toLowerCase().includes(word.toLowerCase())) {
-          matchedEntries.push(subEntry);
+          if (!matchedEntries.some(object => object ===subEntry)) {
+            matchedEntries.push(subEntry);
+          }
         }
       });
     });
@@ -259,7 +261,7 @@ let entries = [
     ],
   },
   {
-    entriesId: 7,
+    entriesId: 8,
     title: "Uge 41",
     userId: 1,
     elective: "Python",
@@ -269,10 +271,7 @@ let entries = [
       { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
     ],
   },
-
 ];
-
-
 
 let entriesIdCounter = Math.max(...entries.map((entry) => entry.entriesId));
 

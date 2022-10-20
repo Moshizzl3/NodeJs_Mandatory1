@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
     "./public/pages/landingPage/landingPage.html",
     {
       tabTitle: "Notepad",
-      pageScript: `<script src="/pages/landingPage/contlandingPageentPage.js"></script>`,
+      pageScript: `<script src="/pages/landingPage/landingPage.js"></script>`,
       pageStylesheet: `<link rel="stylesheet" href="/pages/landingPage/landingPage.css">`,
     },
     true
@@ -58,7 +58,7 @@ app.get("/admin", (req, res) => {
     "./public/pages/adminPage/adminPage.html",
     {
       tabTitle: "Admin",
-      pageScript: `<script src="/pages/adminPahe/adminPage.js"></script>`,
+      pageScript: `<script src="/pages/adminPage/adminPage.js"></script>`,
       pageStylesheet: `<link rel="stylesheet" href="/pages/adminPage/adminPage.css">`,
     },
     true

@@ -1,5 +1,3 @@
-
-
 const navBarContainer = document.getElementById("navContainer");
 const sidePanelDiv = document.getElementById("sidePanel");
 const contentPanelDiv = document.getElementById("contentPanel");
@@ -28,7 +26,7 @@ async function getEntries() {
   const buttonTag = document.createElement("button");
   buttonTag.type = "button";
   buttonTag.id = "addEntryButtonModal";
-  buttonTag.classList.add("btn", "addButton", "btn-sm");
+  buttonTag.classList.add("btn", "addButton");
   buttonTag.setAttribute("data-bs-toggle", "modal");
   buttonTag.setAttribute("data-bs-target", "#myModalNewEntry");
   buttonTag.textContent = "Opret ny";
@@ -38,9 +36,7 @@ async function getEntries() {
   sidePanelDiv.appendChild(divTagRowButton);
 
   const response = await fetch(
-    `/entries/user/${sessionStorage.getItem(
-      "userId"
-    )}/${document.title.toLowerCase()}`
+    `/entries/user/${sessionStorage.getItem("userId")}`
   );
   const data = await response.json();
 
@@ -75,7 +71,7 @@ function fillContentPanel(entry) {
 
   divTagRowButton.appendChild(hTagTitle);
 
-  //delete entry button
+  //delete button
   const divTagRowButtonDelete = document.createElement("div");
   divTagRowButtonDelete.classList.add(
     "row",
@@ -83,14 +79,16 @@ function fillContentPanel(entry) {
     "contentRowButton",
     "justify-content-end"
   );
-  const buttonTagDelete = document.createElement("i");
+  const buttonTagDelete = document.createElement("button");
+  buttonTagDelete.type = "button";
   buttonTagDelete.id = entry.entriesId;
+  buttonTagDelete.textContent = "slet";
   buttonTagDelete.classList.add(
-    "fa",
-    "fa-solid",
-    "fa-trash",
+    "btn",
+    "m-2",
+    "rounded-pill",
     "col-1",
-    "trashIcon"
+    "deleteButton"
   );
   divTagRowButtonDelete.appendChild(buttonTagDelete);
   contentPanelDiv.append(divTagRowButtonDelete);
@@ -109,7 +107,7 @@ function fillContentPanel(entry) {
   const buttonTag = document.createElement("button");
   buttonTag.type = "button";
   buttonTag.id = `addSubEntryButton`;
-  buttonTag.classList.add("btn", "btn-sm", "mt-2", "addButton");
+  buttonTag.classList.add("btn", "mt-2", "addButton");
   buttonTag.setAttribute("data-bs-toggle", "modal");
   buttonTag.setAttribute("data-bs-target", "#myModalNewSubEntry");
   buttonTag.textContent = "Opret ny";
@@ -119,8 +117,8 @@ function fillContentPanel(entry) {
   contentPanelDiv.appendChild(divTagRowButton);
 
   entry.subEntries.forEach((subentry) => {
-    //delete subentry button
-    const buttonTagDelete = document.createElement("i");
+    //delete button
+    const buttonTagDelete = document.createElement("button");
     const divTagRowButtonDelete = document.createElement("div");
     divTagRowButtonDelete.classList.add(
       "row",
@@ -128,13 +126,16 @@ function fillContentPanel(entry) {
       "contentRowButton",
       "justify-content-end"
     );
+    buttonTagDelete.type = "button";
     buttonTagDelete.id = subentry.subEntriesId;
+    buttonTagDelete.textContent = "slet";
     buttonTagDelete.classList.add(
-      "fa",
-      "fa-solid",
-      "fa-trash",
-      "col-1",
-      "trashIcon"
+      "btn",
+      "btn",
+      "m-2",
+      "rounded-pill",
+      "deleteButton",
+      "col-1"
     );
     buttonTagDelete.addEventListener("click", () => {
       console.log("heello");
@@ -143,9 +144,7 @@ function fillContentPanel(entry) {
         headers: {
           "Content-typee": "application/json",
         },
-      }).then((response) =>
-        response.json().then((data) => fillContentPanel(data.data))
-      );
+      });
       getEntries();
     });
     divTagRowButtonDelete.appendChild(buttonTagDelete);
@@ -211,58 +210,16 @@ function fillContentPanel(entry) {
   addSubEntryButton.id = entry.entriesId;
 }
 
-function appendContentPanel(entry, subentry) {
-  //delete subentry button
-  const buttonTagDelete = document.createElement("i");
-  const divTagRowButtonDelete = document.createElement("div");
-  divTagRowButtonDelete.classList.add(
-    "row",
-    "m-1",
-    "contentRowButton",
-    "justify-content-end"
-  );
-  buttonTagDelete.id = subentry.subEntriesId;
-  buttonTagDelete.classList.add(
-    "fa",
-    "fa-solid",
-    "fa-trash",
-    "col-1",
-    "trashIcon"
-  );
-  buttonTagDelete.addEventListener("click", () => {
-    console.log("heello");
-    fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-typee": "application/json",
-      },
-    }).then((response) =>
-      response.json().then((data) => fillContentPanel(data.data))
-    );
-    getEntries();
-  });
-  divTagRowButtonDelete.appendChild(buttonTagDelete);
+function appendContentPanel(entry = None, subentry) {
   //title
   const pTagTitle = document.createElement("p");
   pTagTitle.classList.add("contentTitle");
   pTagTitle.textContent = subentry.subTitle;
-  pTagTitle.id = `entrySubTitle${subentry.subEntriesId}`;
-  pTagTitle.setAttribute("contentEditable", true);
-  pTagTitle.addEventListener("blur", () => {
-    console.log("inside titlte");
-    editSubEntry(entry.entriesId, subentry);
-  });
 
   //text
-  const pTagText = document.createElement("p");
-  pTagText.classList.add("contentText", "w-100");
+  const pTagText = document.createElement("text");
+  pTagText.classList.add("contentText");
   pTagText.textContent = subentry.text;
-  pTagText.id = `entrySubText${subentry.subEntriesId}`;
-  pTagText.setAttribute("contentEditable", true);
-  pTagText.addEventListener("blur", () => {
-    console.log("inside test");
-    editSubEntry(entry.entriesId, subentry);
-  });
 
   //boostrap row
   const divTagRow = document.createElement("div");
@@ -281,7 +238,6 @@ function appendContentPanel(entry, subentry) {
 
   divTagRow.appendChild(divTagContainer);
 
-  divTagContainer.appendChild(divTagRowButtonDelete);
   divTagContainer.appendChild(pTagTitle);
   divTagContainer.appendChild(pTagText);
 
@@ -313,7 +269,6 @@ function addNewEntry() {
   const entry = {
     entriesId: null,
     title: document.getElementById("newEntryTitle").value,
-    elective: document.title.toLowerCase(),
     userId: Number(sessionStorage.getItem("userId")),
     subEntries: [],
   };
@@ -336,20 +291,20 @@ function addNewEntry() {
     })
     .catch((err) => console.log(err));
 }
-function addNewSubEntry(entry) {
+function addNewSubEntry(id) {
   const newSubEntry = {
     subEntriesId: 9,
     subTitle: document.getElementById("newSubEntryTitle").value,
     text: "",
   };
 
-  const response = fetch(`/entries/${entry.entriesId}`, {
+  const response = fetch(`/entries/${id}`, {
     method: "PATCH",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(newSubEntry),
   }).catch((err) => console.log(err));
 
-  appendContentPanel(entry, newSubEntry);
+  appendContentPanel(newSubEntry);
   getEntries();
 }
 
@@ -391,7 +346,7 @@ function searchForEntries() {
     response.json().then((data) => {
       contentPanelDiv.innerHTML = "";
       data.data.forEach((subentry) => {
-        appendContentPanel({}, subentry);
+        appendContentPanel(subentry);
       });
     })
   );
@@ -401,9 +356,7 @@ function searchForEntries() {
 
 addEntryButton.addEventListener("click", () => addNewEntry());
 addSubEntryButton.addEventListener("click", (e) => {
-  fetch(`entries/${e.target.id}`)
-    .then((response) => response.json())
-    .then((data) => addNewSubEntry(data.data));
+  addNewSubEntry(e.target.id);
 });
 
 searchBarButton.addEventListener("click", () => {
