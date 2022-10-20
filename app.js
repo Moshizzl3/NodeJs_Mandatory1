@@ -25,8 +25,6 @@ app.get("/", (req, res) => {
   res.send(page);
 });
 
-
-
 app.get("/python", (req, res) => {
   const page = renderPage(
     "./public/pages/contentPage/contentPage.html",
@@ -85,3 +83,5 @@ const server = app.listen(PORT, (error) => {
   }
   console.log("Server is running on port:", server.address().port);
 });
+
+

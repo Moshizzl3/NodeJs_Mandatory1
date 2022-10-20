@@ -1,6 +1,9 @@
 import { Router } from "express";
+import fileUpload from "express-fileupload";
+import path from "path"
 
 const entriesRouter = Router();
+entriesRouter.use(fileUpload())
 
 entriesRouter.get("/entries", (req, res) => {
   res.status(200).send({ data: entries });
@@ -21,7 +24,7 @@ entriesRouter.get("/entries/search/:searchString", (req, res) => {
     wordsFromString.forEach((word) => {
       entry.subEntries.forEach((subEntry) => {
         if (subEntry.text.toLowerCase().includes(word.toLowerCase())) {
-          if (!matchedEntries.some(object => object ===subEntry)) {
+          if (!matchedEntries.some((object) => object === subEntry)) {
             matchedEntries.push(subEntry);
           }
         }
@@ -48,6 +51,13 @@ entriesRouter.post("/entries", (req, res) => {
   newEntry.userId = Number(newEntry.userId);
   entries.push(newEntry);
   res.status(200).send({ newEntry });
+});
+
+entriesRouter.post("/entries/image", (req, res) => {
+  const {image} = req.files
+  if(!image) return res.status(400)
+  image.mv(path.resolve("./public/ressources/" + image.name))
+  res.status(200).send("ok")
 });
 
 entriesRouter.patch("/entries/:id", (req, res) => {

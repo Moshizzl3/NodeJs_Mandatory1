@@ -1,6 +1,6 @@
 <!-- Button trigger modal -->
   
-  <!-- Image Modal -->
+  <!-- Show Image Modal -->
   <div class="modal fade h-75" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
@@ -14,6 +14,28 @@
       </div>
     </div>
   </div>
+
+    <!--Add image modal -->
+    <div class="modal fade h-75" id="myModalAddImage" tabindex="-1" aria-labelledby="myModalAddImageLabel" aria-hidden="true">
+      <div class="modal-dialog modal modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModalAddImageLabel">Tilføj ny sektion</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modalBody">
+            <div class="container">
+            <form id="imageForm" enctype="multipart/form-data">
+              <input type="file" name="image" />
+              <button type="button" id="addNewImageButton" class="btn btn-primary" data-bs-toggle="modal", data-bs-target="#myModalAddImage">Upload</button>
+          </form>
+
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--New Entry Modal -->
     <div class="modal fade h-75" id="myModalNewEntry" tabindex="-1" aria-labelledby="myModalLabelNewEntry" aria-hidden="true">

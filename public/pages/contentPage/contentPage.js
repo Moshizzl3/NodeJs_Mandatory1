@@ -1,5 +1,3 @@
-
-
 const navBarContainer = document.getElementById("navContainer");
 const sidePanelDiv = document.getElementById("sidePanel");
 const contentPanelDiv = document.getElementById("contentPanel");
@@ -9,6 +7,7 @@ const newEntryModal = document.getElementById("myModallLabelNewEntry");
 const addEntryButton = document.getElementById("addEntryButton");
 let addSubEntryButton = document.querySelector(".addSubEntryButtonModal");
 const searchBarButton = document.getElementById("searchbarButton");
+const addNewImageButton = document.getElementById("addNewImageButton");
 
 //check if a user is logged in
 if (sessionStorage.getItem("userId")) {
@@ -75,26 +74,26 @@ function fillContentPanel(entry) {
 
   divTagRowButton.appendChild(hTagTitle);
 
-  //delete entry button
-  const divTagRowButtonDelete = document.createElement("div");
-  divTagRowButtonDelete.classList.add(
+  //delete entry div
+  const divTagRowDelete = document.createElement("div");
+  divTagRowDelete.classList.add(
     "row",
     "m-1",
     "contentRowButton",
     "justify-content-end"
   );
-  const buttonTagDelete = document.createElement("i");
-  buttonTagDelete.id = entry.entriesId;
-  buttonTagDelete.classList.add(
+  const iconDeleteTag = document.createElement("i");
+  iconDeleteTag.id = entry.entriesId;
+  iconDeleteTag.classList.add(
     "fa",
     "fa-solid",
     "fa-trash",
     "col-1",
     "trashIcon"
   );
-  divTagRowButtonDelete.appendChild(buttonTagDelete);
-  contentPanelDiv.append(divTagRowButtonDelete);
-  buttonTagDelete.addEventListener("click", () => {
+  divTagRowDelete.appendChild(iconDeleteTag);
+  contentPanelDiv.append(divTagRowDelete);
+  iconDeleteTag.addEventListener("click", () => {
     console.log("heello");
     fetch(`entries/${entry.entriesId}`, {
       method: "DELETE",
@@ -119,32 +118,31 @@ function fillContentPanel(entry) {
   contentPanelDiv.appendChild(divTagRowButton);
 
   entry.subEntries.forEach((subentry) => {
-
-    appendContentPanel(entry,subentry)
- 
+    appendContentPanel(entry, subentry);
   });
   addSubEntryButton.id = entry.entriesId;
 }
 
 function appendContentPanel(entry, subentry) {
   //delete subentry button
-  const buttonTagDelete = document.createElement("i");
-  const divTagRowButtonDelete = document.createElement("div");
-  divTagRowButtonDelete.classList.add(
+  const iconeDeleteTag = document.createElement("i");
+  const divTagRowDelete = document.createElement("div");
+  divTagRowDelete.classList.add(
     "row",
     "m-1",
     "contentRowButton",
     "justify-content-end"
   );
-  buttonTagDelete.id = subentry.subEntriesId;
-  buttonTagDelete.classList.add(
+  const divImageAdd = divTagRowDelete.cloneNode(true);
+  iconeDeleteTag.id = subentry.subEntriesId;
+  iconeDeleteTag.classList.add(
     "fa",
     "fa-solid",
     "fa-trash",
     "col-1",
     "trashIcon"
   );
-  buttonTagDelete.addEventListener("click", () => {
+  iconeDeleteTag.addEventListener("click", () => {
     console.log("heello");
     fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {
       method: "DELETE",
@@ -156,7 +154,7 @@ function appendContentPanel(entry, subentry) {
     );
     getEntries();
   });
-  divTagRowButtonDelete.appendChild(buttonTagDelete);
+  divTagRowDelete.appendChild(iconeDeleteTag);
   //title
   const pTagTitle = document.createElement("p");
   pTagTitle.classList.add("contentTitle");
@@ -196,7 +194,7 @@ function appendContentPanel(entry, subentry) {
 
   divTagRow.appendChild(divTagContainer);
 
-  divTagContainer.appendChild(divTagRowButtonDelete);
+  divTagContainer.appendChild(divTagRowDelete);
   divTagContainer.appendChild(pTagTitle);
   divTagContainer.appendChild(pTagText);
 
@@ -214,6 +212,21 @@ function appendContentPanel(entry, subentry) {
       fillModal(subentry, imageTag);
     });
   }
+
+  //add image
+  const iconeImageTag = document.createElement("i");
+  iconeImageTag.setAttribute("data-bs-toggle", "modal");
+  iconeImageTag.setAttribute("data-bs-target", "#myModalAddImage");
+  iconeImageTag.classList.add(
+    "fa",
+    "fa-solid",
+    "fa-image",
+    "col-1",
+    "imageIcon"
+  );
+  divImageAdd.appendChild(iconeImageTag);
+  divTagContainer.appendChild(divImageAdd);
+
   contentPanelDiv.appendChild(divTagRow);
 }
 
@@ -250,7 +263,7 @@ function addNewEntry() {
       console.log(entry);
     })
     .catch((err) => console.log(err));
-    document.getElementById("newEntryTitle").value = ""
+  document.getElementById("newEntryTitle").value = "";
 }
 function addNewSubEntry(entry) {
   const newSubEntry = {
@@ -267,7 +280,7 @@ function addNewSubEntry(entry) {
 
   appendContentPanel(entry, newSubEntry);
   getEntries();
-  document.getElementById("newSubEntryTitle").value = ""
+  document.getElementById("newSubEntryTitle").value = "";
 }
 
 function editEntry(entry) {
@@ -323,4 +336,15 @@ addSubEntryButton.addEventListener("click", (e) => {
 
 searchBarButton.addEventListener("click", () => {
   searchForEntries();
+});
+addNewImageButton.addEventListener("click", async () => {
+  const form = document.getElementById("imageForm")
+  const formData = new FormData(form)
+  console.log("image sent");
+
+  await fetch("entries/image", {
+    method: "POST",
+    body: formData,
+    
+  });
 });

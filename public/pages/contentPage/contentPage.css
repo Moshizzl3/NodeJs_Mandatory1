@@ -53,10 +53,13 @@
 .addButton:hover{
     background-color: rgb(147, 89, 202);
 }
-.trashIcon{
+.trashIcon,.imageIcon{
     font-size: 20px;
     padding-top: 10px;
 }
 .trashIcon:hover{
- color: rgb(96, 39, 37);
+ color: rgb(161, 68, 65);
 }
+.imageIcon:hover{
+    color: rgb(51, 155, 89);
+   }
