@@ -119,94 +119,9 @@ function fillContentPanel(entry) {
   contentPanelDiv.appendChild(divTagRowButton);
 
   entry.subEntries.forEach((subentry) => {
-    //delete subentry button
-    const buttonTagDelete = document.createElement("i");
-    const divTagRowButtonDelete = document.createElement("div");
-    divTagRowButtonDelete.classList.add(
-      "row",
-      "m-1",
-      "contentRowButton",
-      "justify-content-end"
-    );
-    buttonTagDelete.id = subentry.subEntriesId;
-    buttonTagDelete.classList.add(
-      "fa",
-      "fa-solid",
-      "fa-trash",
-      "col-1",
-      "trashIcon"
-    );
-    buttonTagDelete.addEventListener("click", () => {
-      console.log("heello");
-      fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-typee": "application/json",
-        },
-      }).then((response) =>
-        response.json().then((data) => fillContentPanel(data.data))
-      );
-      getEntries();
-    });
-    divTagRowButtonDelete.appendChild(buttonTagDelete);
-    //title
-    const pTagTitle = document.createElement("p");
-    pTagTitle.classList.add("contentTitle");
-    pTagTitle.textContent = subentry.subTitle;
-    pTagTitle.id = `entrySubTitle${subentry.subEntriesId}`;
-    pTagTitle.setAttribute("contentEditable", true);
-    pTagTitle.addEventListener("blur", () => {
-      console.log("inside titlte");
-      editSubEntry(entry.entriesId, subentry);
-    });
 
-    //text
-    const pTagText = document.createElement("p");
-    pTagText.classList.add("contentText", "w-100");
-    pTagText.textContent = subentry.text;
-    pTagText.id = `entrySubText${subentry.subEntriesId}`;
-    pTagText.setAttribute("contentEditable", true);
-    pTagText.addEventListener("blur", () => {
-      console.log("inside test");
-      editSubEntry(entry.entriesId, subentry);
-    });
-
-    //boostrap row
-    const divTagRow = document.createElement("div");
-    divTagRow.classList.add(
-      "row",
-      "border",
-      "rounded",
-      "mt-4",
-      "m-2",
-      "contentRow"
-    );
-
-    //boststrap container
-    const divTagContainer = document.createElement("div");
-    divTagContainer.classList.add("container");
-
-    divTagRow.appendChild(divTagContainer);
-
-    divTagContainer.appendChild(divTagRowButtonDelete);
-    divTagContainer.appendChild(pTagTitle);
-    divTagContainer.appendChild(pTagText);
-
-    //create image if there is an imageurl
-    if (subentry.hasOwnProperty("imageUrl")) {
-      const imageTag = document.createElement("img");
-      imageTag.setAttribute("data-bs-toggle", "modal");
-      imageTag.setAttribute("data-bs-target", "#myModal");
-      imageTag.classList.add("img-fluid", "mx-auto", "d-block", "w-75");
-      imageTag.src = subentry.imageUrl;
-      divTagRow.appendChild(imageTag);
-
-      //modal for bigger image
-      imageTag.addEventListener("click", () => {
-        fillModal(subentry, imageTag);
-      });
-    }
-    contentPanelDiv.appendChild(divTagRow);
+    appendContentPanel(entry,subentry)
+ 
   });
   addSubEntryButton.id = entry.entriesId;
 }
