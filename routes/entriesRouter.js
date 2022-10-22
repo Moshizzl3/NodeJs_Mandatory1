@@ -16,7 +16,7 @@ entriesRouter.get("/entries/:id", (req, res) => {
   res.status(200).send({ data: entry });
 });
 
-entriesRouter.get("/entries/:entryId/:subentryId", (req, res) => {
+entriesRouter.get("/entries/subentry/:entryId/:subentryId", (req, res) => {
   const subEntry = entries
     .find((entry) => entry.entriesId === Number(req.params.entryId))
     .subEntries.find(

@@ -323,6 +323,7 @@ function editSubEntry(id, subentry) {
 
 function searchForEntries() {
   const searchString = document.getElementById("searchInput");
+  console.log(searchString.value)
 
   fetch(`entries/search/${searchString.value}`).then((response) =>
     response.json().then((data) => {
@@ -360,7 +361,7 @@ async function updatePostWithImage(filename) {
   const subEntryId = document.getElementById("contentPanelSubentryId");
   console.log(entryId, subEntryId);
 
-  fetch(`entries/${entryId.textContent}/${subEntryId.textContent}`)
+  fetch(`entries/subentry/${entryId.textContent}/${subEntryId.textContent}`)
     .then((response) => response.json())
     .then((data) => {
       const newSubEntry = { ...data.data };
