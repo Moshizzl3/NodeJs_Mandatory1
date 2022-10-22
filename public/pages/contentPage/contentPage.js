@@ -57,6 +57,8 @@ async function getEntries() {
 }
 
 function fillContentPanel(entry) {
+  const panelEntryId = document.getElementById("contentPanelEntryId");
+  panelEntryId.textContent = entry.entriesId;
   contentPanelDiv.innerHTML = "";
 
   console.log(entry);
@@ -214,17 +216,22 @@ function appendContentPanel(entry, subentry) {
   }
 
   //add image
-  const iconeImageTag = document.createElement("i");
-  iconeImageTag.setAttribute("data-bs-toggle", "modal");
-  iconeImageTag.setAttribute("data-bs-target", "#myModalAddImage");
-  iconeImageTag.classList.add(
+  const iconImageTag = document.createElement("i");
+  iconImageTag.id = subentry.subEntriesId;
+  iconImageTag.setAttribute("data-bs-toggle", "modal");
+  iconImageTag.setAttribute("data-bs-target", "#myModalAddImage");
+  iconImageTag.classList.add(
     "fa",
     "fa-solid",
     "fa-image",
     "col-1",
     "imageIcon"
   );
-  divImageAdd.appendChild(iconeImageTag);
+  iconImageTag.addEventListener("click", () => {
+    const subEntryId = document.getElementById("contentPanelSubentryId");
+    subEntryId.textContent = subentry.subEntriesId;
+  });
+  divImageAdd.appendChild(iconImageTag);
   divTagContainer.appendChild(divImageAdd);
 
   contentPanelDiv.appendChild(divTagRow);
@@ -337,14 +344,36 @@ addSubEntryButton.addEventListener("click", (e) => {
 searchBarButton.addEventListener("click", () => {
   searchForEntries();
 });
-addNewImageButton.addEventListener("click", async () => {
-  const form = document.getElementById("imageForm")
-  const formData = new FormData(form)
-  console.log("image sent");
 
-  await fetch("entries/image", {
+addNewImageButton.addEventListener("click", async () => {
+  const form = document.getElementById("imageForm");
+  const formData = new FormData(form);
+  await fetch(`entries/image/`, {
     method: "POST",
     body: formData,
-    
   });
+  updatePostWithImage(formData.get("image").name);
 });
+
+async function updatePostWithImage(filename) {
+  const entryId = document.getElementById("contentPanelEntryId");
+  const subEntryId = document.getElementById("contentPanelSubentryId");
+  console.log(entryId, subEntryId);
+
+  fetch(`entries/${entryId.textContent}/${subEntryId.textContent}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const newSubEntry = { ...data.data };
+      newSubEntry.imageUrl = `ressources/images/${filename}`;
+      console.log(data.data);
+
+      fetch(`/entries/image/${entryId.textContent}/${subEntryId.textContent}`, {
+        method: "PATCH",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(newSubEntry),
+      })
+        .then((response) => response.json())
+        .then((data) => fillContentPanel(data.data))
+        .then(getEntries());
+    });
+}

@@ -1,9 +1,9 @@
 import { Router } from "express";
 import fileUpload from "express-fileupload";
-import path from "path"
+import path from "path";
 
 const entriesRouter = Router();
-entriesRouter.use(fileUpload())
+entriesRouter.use(fileUpload());
 
 entriesRouter.get("/entries", (req, res) => {
   res.status(200).send({ data: entries });
@@ -14,6 +14,16 @@ entriesRouter.get("/entries/:id", (req, res) => {
     (entry) => entry.entriesId === Number(req.params.id)
   );
   res.status(200).send({ data: entry });
+});
+
+entriesRouter.get("/entries/:entryId/:subentryId", (req, res) => {
+  const subEntry = entries
+    .find((entry) => entry.entriesId === Number(req.params.entryId))
+    .subEntries.find(
+      (subentry) => subentry.subEntriesId === Number(req.params.subentryId)
+    );
+  console.log(subEntry);
+  res.status(200).send({ data: subEntry });
 });
 
 entriesRouter.get("/entries/search/:searchString", (req, res) => {
@@ -54,10 +64,10 @@ entriesRouter.post("/entries", (req, res) => {
 });
 
 entriesRouter.post("/entries/image", (req, res) => {
-  const {image} = req.files
-  if(!image) return res.status(400)
-  image.mv(path.resolve("./public/ressources/" + image.name))
-  res.status(200).send("ok")
+  const { image } = req.files;
+  if (!image) return res.status(400);
+  image.mv(path.resolve("./public/ressources/images/" + image.name));
+  res.status(200).send("ok");
 });
 
 entriesRouter.patch("/entries/:id", (req, res) => {
@@ -79,10 +89,10 @@ entriesRouter.patch("/entries/:id", (req, res) => {
   }
 });
 
-entriesRouter.patch("/entries/:entryId/:subEndtryId", (req, res) => {
+entriesRouter.patch("/entries/image/:entryId/:subEndtryId", (req, res) => {
   const entryId = Number(req.params.entryId);
   const subEntryId = Number(req.params.subEndtryId);
-  let entry = entries.find((entry) => entry.entriesId == entryId);
+  let entry = entries.find((entry) => entry.entriesId === entryId);
 
   let body = { ...req.body };
 
@@ -91,11 +101,13 @@ entriesRouter.patch("/entries/:entryId/:subEndtryId", (req, res) => {
       (subEntry) => subEntry.subEntriesId === subEntryId
     );
     if (index >= 0) {
+      entry.subEntries[index].imageUrl = "";
       entry.subEntries[index] = body;
+      entry.subEntries[index].subEntriesId = Number(body.subEntriesId);
 
       console.log(entryId, subEntryId);
 
-      res.status(200).send(entry);
+      res.status(200).send({ data: entry });
     } else res.status(404);
   } else {
     res.status(404).send("Not Found");
