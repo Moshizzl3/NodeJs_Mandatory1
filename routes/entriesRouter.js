@@ -77,9 +77,13 @@ entriesRouter.post("/entries/image", (req, res) => {
 entriesRouter.patch("/entries/:id", (req, res) => {
   const entryId = Number(req.params.id);
   let entry = entries.find((entry) => entry.entriesId == entryId);
-
-  let body = { ...req.body };
+  const subEntries = entry.subEntries
+  console.log(body)
   if (entry) {
+    
+    let subEntriesIdCounter = Math.max(...subEntries.map((subentry) => subentry.subEntriesId));
+
+    let body = { ...req.body, subEntriesId: ++subEntriesIdCounter };
     //spread operater doesnt work, ask anders why
     entry.subEntries.push(body);
     for (let i in body) {
@@ -87,7 +91,7 @@ entriesRouter.patch("/entries/:id", (req, res) => {
         entry[i] = body[i];
       }
     }
-    res.status(200).send("Entry has been updated");
+    res.status(200).send({data: body});
   } else {
     res.status(404).send("No entry was found");
   }
@@ -278,10 +282,17 @@ Derefter skal der laves en instans af express inde i ens app.js fil, hvorefter m
     userId: 1,
     elective: "NodeJs",
     subEntries: [
-      { subEntriesId: 1, subTitle: "Arrow-functions", text: `En arrow funktion, er en anonym funktion, som kan hjælpe med at øge læsbarheden samt at gøre koden mere koncentreret. Disse bruges især i forbindelse med ”array metoder” (map, filter, reduce, foreach), der alle tager imod en callback funktion. 
+      {
+        subEntriesId: 1,
+        subTitle: "Arrow-functions",
+        text: `En arrow funktion, er en anonym funktion, som kan hjælpe med at øge læsbarheden samt at gøre koden mere koncentreret. Disse bruges især i forbindelse med ”array metoder” (map, filter, reduce, foreach), der alle tager imod en callback funktion. 
 Arrow funktioner bruges også i forbindelse med callback funktioner, da man så kan sende en arrow funktion med som argument.
-      `},
-      { subEntriesId: 2, subTitle: "Array-functions", text: `Array-funktioner er funktioner som kan ændre i elementerne i en array, ud fra den funktion man har sendt med som argument, og returnerer en opdaterede array.
+      `,
+      },
+      {
+        subEntriesId: 2,
+        subTitle: "Array-functions",
+        text: `Array-funktioner er funktioner som kan ændre i elementerne i en array, ud fra den funktion man har sendt med som argument, og returnerer en opdaterede array.
 Det er en god ide at bruge disse array funktioner, da det gør det nemmere at forstå hvad der sker, fremfor en masse loops.
       •	.map() denne funktion returner en array, hvor elementerne i array er ændret i forholdet til den funktion 
         man sender med. Så denne kan bruges hvis man ønsker at rette i elementerne i arrayet
@@ -289,21 +300,30 @@ Det er en god ide at bruge disse array funktioner, da det gør det nemmere at fo
         at få alle elementer med et bestemt navn, så er filter god til dette.
       •	.reduce() dene funktion returnerer en array reduceret til én værdi. Dette kunne fx være en sum af en bestemt 
         attribut på hvert element.
-      `},
-      { subEntriesId: 3, subTitle: "Import og Moduler", text: `I takt med at vores applikation bliver større, er det nødvendigt at begynde og bruge moduler. Moduler er andre filer, som kan indeholde klasser, ”libraries” og funktioner, disse kan man tilgå som vi fx gør med Express.  
+      `,
+      },
+      {
+        subEntriesId: 3,
+        subTitle: "Import og Moduler",
+        text: `I takt med at vores applikation bliver større, er det nødvendigt at begynde og bruge moduler. Moduler er andre filer, som kan indeholde klasser, ”libraries” og funktioner, disse kan man tilgå som vi fx gør med Express.  
 Der findes forskellige syntaks for at bruge moduler, CommonJs og ES Imports. 
 Require (CommonJs) var den gamle syntaks for at importere moduler på. Man importerede ved at bruge require(), hvorefter man kunne indtaste det man skal bruge: const express = require("express")
 Require er synkront dvs. at hvis man har flere require kald, eksekveres de i rækkefølge.
 ES imports er den nyere syntaks for at importere et modul, og kan være asynkront. Man importerer ved at bruge import og from, fx: import express from "express";
 ES import tillader også at man kan importere specifikke elementer af modulet, det gøres ved at bruge { }  rundt om:  import {renderPage} from "./utils/templateRenderer.js";
 For at kunne benytte ES import syntaks, skal man i sin package.json skrive ”type”:”module”
-      `},
-      { subEntriesId: 3, subTitle: "Static files", text: `Express kan bruges til at servere statiske sider. For at kunne gøre det, kræver det et par steps.
+      `,
+      },
+      {
+        subEntriesId: 4,
+        subTitle: "Static files",
+        text: `Express kan bruges til at servere statiske sider. For at kunne gøre det, kræver det et par steps.
 Udover express, skal vi også importere path: import path from "path";
 path modulet hjælper os med at definere stien til en bestemt fil korrekt, dette gør vi ved at kalde: path.resolve(sti-til-fil)
 Vi peger vore app hen til en bestemt folder, der tillader at filer kan serveres herfra: app.use(express.static("public"));
 Grunden til at vi gør dette, er så at vi kan sikre vores app. På denne her måde, kan der ikke redigeres i filer der eksisterer andre steder end i public mappen. Vi har nu gjort, at der kun er tilgang til public mappen på clientside. Publicmappen bør kun indeholde frontend relaterede ting såsom html, css og frontend Javascript. 
-`},
+`,
+      },
     ],
   },
   {
@@ -312,24 +332,36 @@ Grunden til at vi gør dette, er så at vi kan sikre vores app. På denne her m�
     userId: 1,
     elective: "NodeJs",
     subEntries: [
-      { subEntriesId: 1, subTitle: "Package.json - udvidet", text: `Package.Json filen indeholder som tidligere nævnt en masse data omkring projektet.
+      {
+        subEntriesId: 1,
+        subTitle: "Package.json - udvidet",
+        text: `Package.Json filen indeholder som tidligere nævnt en masse data omkring projektet.
 Meta data: Denne indeholder info omkring projektet såsom navn, forklaring eller version
 dependencies: Denne indeholder afhængighederne  som projektet har, og bliver tilgået når man skal skriver ”npm install”, hvorefter dependencies installeres.
 scripts: Her kan man definere sine scripts, disse kommer i et key value forhold, så man giver sit script et navn, fx: ”start-dev”:”nodemon app.js”
 Jeg kan nu skrive npm run start-dev i min terminal, og nodemon vil startes op.
 Nodemon er et modul der er lækkert at bruge under udvikling, da det genstarter webserveren hver gang man laver en ændring i filen.
-` },
-      { subEntriesId: 2, subTitle: "Fetch", text: `fetch() metoden i javacript, bruges til at sende ”requests” til en server, metoden returnere et ”promise”, som vi så kan ”pakke ud” til data.
+`,
+      },
+      {
+        subEntriesId: 2,
+        subTitle: "Fetch",
+        text: `fetch() metoden i javacript, bruges til at sende ”requests” til en server, metoden returnere et ”promise”, som vi så kan ”pakke ud” til data.
 fetch() tager i mod to argumenter, url og options; hvor url er et krav at sende ,men options ikke er et krav. Option kan bruges til at specificere hvilken type request det er:  POST, PUT, DELETE 
 Dette er ikke nødvendigt for en GET request.
 fetch() er asynkront, da vi får et promise retur. Dette betyder at når vi laver vores request, skal vi afvente et promise, så fremt det lykkedes kan vi så pakke reponseobjektet ud, hvis ikke det lykkedes mislykkedes promiset og vi har ikke noget objekt. For at håndtere dette, kan man enten bruge .then syntaks, eller async/await:
-`},
-      { subEntriesId: 3, subTitle: "CSS", text: `Der findes 3 metoder at tilføje css til et HTML element.
+`,
+      },
+      {
+        subEntriesId: 3,
+        subTitle: "CSS",
+        text: `Der findes 3 metoder at tilføje css til et HTML element.
       • Inline-css: dette defineres direkte i html-tagget ved at bruge style=”color: red”
       • Styletag-css: dette defineres i html dokumentet, typisk i headeren, med et style tag: <style> css skrives her</style>
       • Css-fil: her linkes en css fil til ens html dokument ved at bruge <link> tagget: <link rel="stylesheet"
        href="mystyle.css">
-` },
+`,
+      },
     ],
   },
   {
@@ -338,22 +370,33 @@ fetch() er asynkront, da vi får et promise retur. Dette betyder at når vi lave
     userId: 1,
     elective: "NodeJs",
     subEntries: [
-      { subEntriesId: 1, subTitle: "Miljø variabler", text: `I Nodejs kan man definere mijøvariabler fx til porten, dette gøres ved at skrive:  const PORT = process.env.PORT || 3000; 
+      {
+        subEntriesId: 1,
+        subTitle: "Miljø variabler",
+        text: `I Nodejs kan man definere mijøvariabler fx til porten, dette gøres ved at skrive:  const PORT = process.env.PORT || 3000; 
 Vores Node app, vil nu køre på en port vi sender med som en miljøvariabel (hvis vi giver en), ELLER, på port 3000 hvis vi ikke giver en variabel.
 For at tildelte en miljøvariabel, kan vi i terminalen køre vores nodeapp på denne måde: PORT=8080 nodemon app.js
 Vores app vil nu køre på port 8080, havde vi ikke defineret en port så ville den køre på port 3000.
 En package vi benytter er coss-env, som er en del af vores dependencies i package.json filen. Denne hjælper os med at sætte de her miljøvariabler rigtigt op da det er forskellgt fra system til system hvordan de håndteres.
-` },
-      { subEntriesId: 2, subTitle: "Redirect frontend", text: `Man kan redirecte på forskellige måde i frontenden:
+`,
+      },
+      {
+        subEntriesId: 2,
+        subTitle: "Redirect frontend",
+        text: `Man kan redirecte på forskellige måde i frontenden:
       • Man kan gøre det direkte i html ved at bruge href=”url” inde i selve html taget.
       • Man kan gøre det ved at bruge javascript:  window.location.href = ”/url”
       • En anden metode man kan bruge i javascript er:  window.location.replace(”url”)
-      ` },
-      { subEntriesId: 3, subTitle: "Redirect backend", text: `Man kan redirecte i sin backend, ved hjælp af express.
+      `,
+      },
+      {
+        subEntriesId: 3,
+        subTitle: "Redirect backend",
+        text: `Man kan redirecte i sin backend, ved hjælp af express.
 Måde at gøre det på er at bruge redirect metoden, som er indbygget i express. Vi kan bruge den på responset: res.redirect (”url”) inde i vores .get metode.
 Url’en der redirectes til skal eksistere i ens backend.
-      ` },
-      { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
+      `,
+      },
     ],
   },
   {
@@ -362,21 +405,33 @@ Url’en der redirectes til skal eksistere i ens backend.
     userId: 1,
     elective: "NodeJs",
     subEntries: [
-      { subEntriesId: 1, subTitle: "Server Side Rendering", text: `SSR står for Server Side Rendering, som betyder at ens htmlsider bliver renderet på serveren inden de sendes til klienten.
+      {
+        subEntriesId: 1,
+        subTitle: "Server Side Rendering",
+        text: `SSR står for Server Side Rendering, som betyder at ens htmlsider bliver renderet på serveren inden de sendes til klienten.
 Styrkerne for SSR er at filer loades hurtigere, så brugeren af siden får en god oplevelse. En anden styrke er at SEO bliver nemmere/bedre da siden er renderet før den loades. 
 Svaghedenerne derimod for SSR er prisen for dette, da det nu er serveren der skal bruge ressourcer på at render siden og ikke klienten. Store komplekse sider kan godt tage længere tid at loade, så man skal også være opmærksom på størrelsen af ens projekt.
-` },
-      { subEntriesId: 2, subTitle: "Client Side Rendering", text: `CSR står for Client Side Rendering, som betyder at ens html sider bliver renderet løbende på klient siden.
+`,
+      },
+      {
+        subEntriesId: 2,
+        subTitle: "Client Side Rendering",
+        text: `CSR står for Client Side Rendering, som betyder at ens html sider bliver renderet løbende på klient siden.
 Styrkerne for CSR er at elementer kan blive renderet hos klienten løbende og kun hvis klienten skal bruge dem, derudover kan undgå flere kald til serveren på denne måde. Det er ikke længere ens server der render alt men clienten, der kan spares dyrebare server ressourcer på denne måde.
 En svaghed kan være hastigheden som elementerne loades in (SSR er hurtigere i mindre projekter), en anden svaghed er at det ikke er SEO optimeret, da ens elementer rederes løbende og ikke vil være tilgængelige fra start af.
-` },
-      { subEntriesId: 3, subTitle: "At bruge SSR", text: `Ved at benytte SSR, kan vi skabe nogen templates som vi kan loade ind.
+`,
+      },
+      {
+        subEntriesId: 3,
+        subTitle: "At bruge SSR",
+        text: `Ved at benytte SSR, kan vi skabe nogen templates som vi kan loade ind.
 Vi kan bygge en side som vi kan render og sende retur til klienten, ud fra forskellige komponenter. Hvis man forsøger bryder en side ned i komponenter, så består den typisk af en header, noget indhold og en footer.
 For at kunne bruge filerne på vores server skal vi importere et modul der hedder fs. Dette er fil system modul, der tillader os at manipulere med filerne på vores server (læse, skrive, ændre, slette).
 Vi kan så bruge fs.readFileSync(”folder-path”) for læse vores fil, og så efterfølgende bruge toString metoden for at gøre det til en String: 
 const modal = fs.readFileSync("./public/components/modal/modal.html").toString();
 Denne variable kan vi så appende til andre variabler af samme type for til sidst at bygge en hel siden:
-      `},
+      `,
+      },
     ],
   },
   {
@@ -395,6 +450,17 @@ Denne variable kan vi så appende til andre variabler af samme type for til sids
     title: "Uge 41",
     userId: 1,
     elective: "Python",
+    subEntries: [
+      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
+      { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
+      { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
+    ],
+  },
+  {
+    entriesId: 9,
+    title: "Uge 41",
+    userId: 1,
+    elective: "machinelearning",
     subEntries: [
       { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },

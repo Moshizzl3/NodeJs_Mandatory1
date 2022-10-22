@@ -274,7 +274,7 @@ function addNewEntry() {
 }
 function addNewSubEntry(entry) {
   const newSubEntry = {
-    subEntriesId: 9,
+    subEntriesId: 0,
     subTitle: document.getElementById("newSubEntryTitle").value,
     text: "",
   };
@@ -283,9 +283,11 @@ function addNewSubEntry(entry) {
     method: "PATCH",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(newSubEntry),
-  }).catch((err) => console.log(err));
+  })
+    .then((response) => response.json())
+    .then((data) => appendContentPanel(entry, data.data))
+    .catch((err) => console.log(err));
 
-  appendContentPanel(entry, newSubEntry);
   getEntries();
   document.getElementById("newSubEntryTitle").value = "";
 }
@@ -311,7 +313,7 @@ function editSubEntry(id, subentry) {
       .textContent,
     text: document.getElementById(`entrySubText${subentry.subEntriesId}`)
       .textContent,
-      imageUrl: subentry.imageUrl
+    imageUrl: subentry.imageUrl,
   };
 
   fetch(`/entries/subentry/${id}/${subentry.subEntriesId}`, {
@@ -325,7 +327,7 @@ function editSubEntry(id, subentry) {
 
 function searchForEntries() {
   const searchString = document.getElementById("searchInput");
-  console.log(searchString.value)
+  console.log(searchString.value);
 
   fetch(`entries/search/${searchString.value}`).then((response) =>
     response.json().then((data) => {
@@ -370,11 +372,14 @@ async function updatePostWithImage(filename) {
       newSubEntry.imageUrl = `ressources/images/${filename}`;
       console.log(data.data);
 
-      fetch(`/entries/subentry/${entryId.textContent}/${subEntryId.textContent}`, {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(newSubEntry),
-      })
+      fetch(
+        `/entries/subentry/${entryId.textContent}/${subEntryId.textContent}`,
+        {
+          method: "PATCH",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify(newSubEntry),
+        }
+      )
         .then((response) => response.json())
         .then((data) => fillContentPanel(data.data))
         .then(getEntries());
