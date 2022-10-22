@@ -311,13 +311,15 @@ function editSubEntry(id, subentry) {
       .textContent,
     text: document.getElementById(`entrySubText${subentry.subEntriesId}`)
       .textContent,
+      imageUrl: subentry.imageUrl
   };
 
-  fetch(`/entries/${id}/${subentry.subEntriesId}`, {
+  fetch(`/entries/subentry/${id}/${subentry.subEntriesId}`, {
     method: "PATCH",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(newSubEntry),
   });
+
   getEntries();
 }
 
@@ -368,7 +370,7 @@ async function updatePostWithImage(filename) {
       newSubEntry.imageUrl = `ressources/images/${filename}`;
       console.log(data.data);
 
-      fetch(`/entries/image/${entryId.textContent}/${subEntryId.textContent}`, {
+      fetch(`/entries/subentry/${entryId.textContent}/${subEntryId.textContent}`, {
         method: "PATCH",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(newSubEntry),

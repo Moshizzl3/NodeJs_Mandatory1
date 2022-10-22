@@ -16,6 +16,7 @@ entriesRouter.get("/entries/:id", (req, res) => {
   res.status(200).send({ data: entry });
 });
 
+//get subentry
 entriesRouter.get("/entries/subentry/:entryId/:subentryId", (req, res) => {
   const subEntry = entries
     .find((entry) => entry.entriesId === Number(req.params.entryId))
@@ -26,6 +27,7 @@ entriesRouter.get("/entries/subentry/:entryId/:subentryId", (req, res) => {
   res.status(200).send({ data: subEntry });
 });
 
+//get subentryies based on search
 entriesRouter.get("/entries/search/:searchString", (req, res) => {
   const wordsFromString = req.params.searchString.split(" ");
   const matchedEntries = [];
@@ -63,6 +65,7 @@ entriesRouter.post("/entries", (req, res) => {
   res.status(200).send({ newEntry });
 });
 
+//uploads image to server
 entriesRouter.post("/entries/image", (req, res) => {
   const { image } = req.files;
   if (!image) return res.status(400);
@@ -70,6 +73,7 @@ entriesRouter.post("/entries/image", (req, res) => {
   res.status(200).send("ok");
 });
 
+//updates entry
 entriesRouter.patch("/entries/:id", (req, res) => {
   const entryId = Number(req.params.id);
   let entry = entries.find((entry) => entry.entriesId == entryId);
@@ -89,7 +93,8 @@ entriesRouter.patch("/entries/:id", (req, res) => {
   }
 });
 
-entriesRouter.patch("/entries/image/:entryId/:subEndtryId", (req, res) => {
+//updates subentry
+entriesRouter.patch("/entries/subentry/:entryId/:subEndtryId", (req, res) => {
   const entryId = Number(req.params.entryId);
   const subEntryId = Number(req.params.subEndtryId);
   let entry = entries.find((entry) => entry.entriesId === entryId);
@@ -101,11 +106,8 @@ entriesRouter.patch("/entries/image/:entryId/:subEndtryId", (req, res) => {
       (subEntry) => subEntry.subEntriesId === subEntryId
     );
     if (index >= 0) {
-      entry.subEntries[index].imageUrl = "";
       entry.subEntries[index] = body;
       entry.subEntries[index].subEntriesId = Number(body.subEntriesId);
-
-      console.log(entryId, subEntryId);
 
       res.status(200).send({ data: entry });
     } else res.status(404);
