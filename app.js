@@ -38,6 +38,19 @@ app.get("/python", (req, res) => {
   res.send(page);
 });
 
+app.get("/machinelearning", (req, res) => {
+  const page = renderPage(
+    "./public/pages/contentPage/contentPage.html",
+    {
+      tabTitle: "machinelearning",
+      pageScript: `<script src="/pages/contentPage/contentPage.js"></script>`,
+      pageStylesheet: `<link rel="stylesheet" href="/pages/contentPage/contentPage.css">`,
+    },
+    true
+  );
+  res.send(page);
+});
+
 app.get("/nodejs", (req, res) => {
   const page = renderPage(
     "./public/pages/contentPage/contentPage.html",
