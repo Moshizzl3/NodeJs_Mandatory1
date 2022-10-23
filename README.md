@@ -11,8 +11,8 @@ To run the project:
 
 Application is now running, and you can navigate to local host, and the port specified in package.json file.
 
-To test the application, use test user:
-email: test1@test.dk
-password: 123
+To test the application, use test user:  
+email: test1@test.dk  
+password: 123  
 
 HF 🚀 💣 🔥 
