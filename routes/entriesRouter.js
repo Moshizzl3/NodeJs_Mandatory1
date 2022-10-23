@@ -23,7 +23,6 @@ entriesRouter.get("/entries/subentry/:entryId/:subentryId", (req, res) => {
     .subEntries.find(
       (subentry) => subentry.subEntriesId === Number(req.params.subentryId)
     );
-  console.log(subEntry);
   res.status(200).send({ data: subEntry });
 });
 
@@ -43,7 +42,6 @@ entriesRouter.get("/entries/search/:searchString", (req, res) => {
       });
     });
   });
-  console.log(wordsFromString);
   res.status(200).send({ data: matchedEntries });
 });
 
@@ -59,7 +57,6 @@ entriesRouter.get("/entries/user/:userId/:elective", (req, res) => {
 entriesRouter.post("/entries", (req, res) => {
   const newEntry = { ...req.body };
   newEntry.entriesId = ++entriesIdCounter;
-  console.log(newEntry.entriesId);
   newEntry.userId = Number(newEntry.userId);
   entries.push(newEntry);
   res.status(200).send({ newEntry });
@@ -78,7 +75,6 @@ entriesRouter.patch("/entries/:id", (req, res) => {
   const entryId = Number(req.params.id);
   let entry = entries.find((entry) => entry.entriesId == entryId);
   const subEntries = entry.subEntries;
-  console.log(body);
   if (entry) {
     let subEntriesIdCounter = Math.max(
       ...subEntries.map((subentry) => subentry.subEntriesId)
@@ -145,10 +141,6 @@ entriesRouter.delete("/entries/:entryId/:subEntryId", (req, res) => {
     );
     if (index >= 0) {
       const test = entry.subEntries.splice(index, 1);
-      console.log(test);
-
-      console.log(entryId, subEntryId);
-
       res.status(200).send({ data: entry });
     } else res.status(404);
   } else {

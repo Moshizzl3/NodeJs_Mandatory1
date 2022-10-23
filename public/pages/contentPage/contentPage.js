@@ -61,7 +61,6 @@ function fillContentPanel(entry) {
   panelEntryId.textContent = entry.entriesId;
   contentPanelDiv.innerHTML = "";
 
-  console.log(entry);
   //boostrap row for button
   const divTagRowButton = document.createElement("div");
   divTagRowButton.classList.add("row", "m-1", "contentRowButton");
@@ -96,7 +95,6 @@ function fillContentPanel(entry) {
   divTagRowDelete.appendChild(iconDeleteTag);
   contentPanelDiv.append(divTagRowDelete);
   iconDeleteTag.addEventListener("click", () => {
-    console.log("heello");
     fetch(`entries/${entry.entriesId}`, {
       method: "DELETE",
       headers: {
@@ -145,7 +143,6 @@ function appendContentPanel(entry, subentry) {
     "trashIcon"
   );
   iconeDeleteTag.addEventListener("click", () => {
-    console.log("heello");
     fetch(`entries/${entry.entriesId}/${subentry.subEntriesId}`, {
       method: "DELETE",
       headers: {
@@ -164,7 +161,6 @@ function appendContentPanel(entry, subentry) {
   pTagTitle.id = `entrySubTitle${subentry.subEntriesId}`;
   pTagTitle.setAttribute("contentEditable", true);
   pTagTitle.addEventListener("blur", () => {
-    console.log("inside titlte");
     editSubEntry(entry.entriesId, subentry);
   });
 
@@ -175,7 +171,6 @@ function appendContentPanel(entry, subentry) {
   pTagText.id = `entrySubText${subentry.subEntriesId}`;
   pTagText.setAttribute("contentEditable", true);
   pTagText.addEventListener("blur", () => {
-    console.log("inside test");
     editSubEntry(entry.entriesId, subentry);
   });
 
@@ -267,9 +262,8 @@ function addNewEntry() {
     .then((response) => response.json())
     .then((data) => {
       entry.entriesId = data.newEntry.entriesId;
-      console.log(entry);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
   document.getElementById("newEntryTitle").value = "";
 }
 function addNewSubEntry(entry) {
@@ -286,7 +280,7 @@ function addNewSubEntry(entry) {
   })
     .then((response) => response.json())
     .then((data) => appendContentPanel(entry, data.data))
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
 
   getEntries();
   document.getElementById("newSubEntryTitle").value = "";
@@ -295,13 +289,12 @@ function addNewSubEntry(entry) {
 function editEntry(entry) {
   const newTitle = document.getElementById("entryTitle");
   entry.title = newTitle.textContent;
-  console.log(entry);
 
   const response = fetch(`/entries/${entry.entriesId}`, {
     method: "PATCH",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(entry),
-  }).catch((err) => console.log(err));
+  }).catch((err) => console.error(err));
 
   getEntries();
 }
@@ -363,7 +356,6 @@ addNewImageButton.addEventListener("click", async () => {
 async function updatePostWithImage(filename) {
   const entryId = document.getElementById("contentPanelEntryId");
   const subEntryId = document.getElementById("contentPanelSubentryId");
-  console.log(entryId, subEntryId);
 
   fetch(`entries/subentry/${entryId.textContent}/${subEntryId.textContent}`)
     .then((response) => response.json())

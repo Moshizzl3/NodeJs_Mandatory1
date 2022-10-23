@@ -9,7 +9,6 @@ if (!sessionStorage.getItem("userId")) {
 
 
 colorButton.addEventListener('click', ()=> {
-  console.log(colorPicker.value)
   document.body.style.backgroundColor = colorPicker.value;
 
   fetch(`users/${Number(sessionStorage.getItem("userId"))}`,{

@@ -29,8 +29,6 @@ userRouter.post("/login", (req, res) => {
 userRouter.patch("/users/:id", (req, res) => {
   const index = users.findIndex((user) => user.userId === Number(req.params.id));
 
-  console.log(req.body)
-  console.log(index)
 
   if (index >= 0) {
     users[index] = { ...users[index], ...req.body };
