@@ -77,11 +77,12 @@ entriesRouter.post("/entries/image", (req, res) => {
 entriesRouter.patch("/entries/:id", (req, res) => {
   const entryId = Number(req.params.id);
   let entry = entries.find((entry) => entry.entriesId == entryId);
-  const subEntries = entry.subEntries
-  console.log(body)
+  const subEntries = entry.subEntries;
+  console.log(body);
   if (entry) {
-    
-    let subEntriesIdCounter = Math.max(...subEntries.map((subentry) => subentry.subEntriesId));
+    let subEntriesIdCounter = Math.max(
+      ...subEntries.map((subentry) => subentry.subEntriesId)
+    );
 
     let body = { ...req.body, subEntriesId: ++subEntriesIdCounter };
     //spread operater doesnt work, ask anders why
@@ -91,7 +92,7 @@ entriesRouter.patch("/entries/:id", (req, res) => {
         entry[i] = body[i];
       }
     }
-    res.status(200).send({data: body});
+    res.status(200).send({ data: body });
   } else {
     res.status(404).send("No entry was found");
   }
@@ -186,6 +187,7 @@ Med NodeJs kan man manipulere med filer og data på serverside. Node kan også b
       {
         subEntriesId: 3,
         subTitle: `Package.json`,
+        imageUrl: "ressources/images/package-json.png",
         text: `Package.json filen indeholder en masse forskelligt data for projektet. Man laver egentlig bare en fil i roden af projektet der hedder package.json. Inde i filen kan man så oprette et objekt hvori der er et key-value forhold, der er utrolig mange ting man kan notere her, men overordnet er det:
         • Metadate – informativ data om projektet
         • Dependencires – Hvilke afhængigheder projektet har, Express er fx en dependency. Når man tilføjer en dependency 
@@ -209,12 +211,11 @@ De bør laves i denne rækkefølge og bør være i flertal (beers, weapons, osv.
       {
         subEntriesId: 5,
         subTitle: `Variabler og datastrukturer`,
-        text: `Variabler bør enten være const eller let. const tillader ikke en ”reassignment” eller ”redeclation”, hvorimod let tillader dette
+        text: `Variabler bør enten være const eller let. const tillader ikke en ”reassignment” eller ”redeclation”, hvorimod let tillader en "reassignment"
 Der findes forskellige datastrukturer i Javascript, dem vi har arbejdet mest med er: 
 Arrays – En collection af elementer som er gemt et bestemt et sted i memory
 Objekter – Et objekt er en collection af et key value pair, fx {Name: ”Kurt”}
       `,
-        imageUrl: "ressources/images/testsnip.png",
       },
     ],
   },
@@ -227,13 +228,24 @@ Objekter – Et objekt er en collection af et key value pair, fx {Name: ”Kurt�
       {
         subEntriesId: 1,
         subTitle: "Funktioner",
-        text: `En funktion er en blok kode, som udfører en specifik handling. En funktion i javascript defineres ved at bruge key word ”function”, hvorefter man definerer navnet efterfulgt af to paranteser:`,
+        imageUrl:"ressources/images/functions.png",
+        text: `En funktion er en blok kode, som udfører en specifik handling. Der findes 3 tryper funktioner i javascript:
+      • "Named functions": defineres ved at bruge key word ”function”, hvorefter man definerer navnet 
+        efterfulgt af to paranteser, også kaldt "function declatration".
+      • "Unnamed functions": En anonym funktion, dvs. den ikke har et navn, her bruges key word 
+        function efterfulgt af to paratenser, også kaldt en "function expression"
+      •"Arrow-functions": også en anonym funktion, her skal man dog blot bruge paranteser 
+        efterfulgt af en pil: () =>
+        Man skal så bruge brackets hvis man vil have flere linjers kode: () => {..kode}
+
+      `,
       },
       {
         subEntriesId: 2,
         subTitle: "Callback functions",
+        imageUrl:"ressources/images/callback.png",
         text: `En callback function, er en funktion som der kan sendes med som et argument til en anden funktion.
-Vi bruger det tit i forbindelse med at fetche, når vu bruger .then() (.then() tager imod en callback funktion). Dette gør at vi kan kalde et endpoint, hvorefter vi kan udføre en anden funktion, efter vi har fået et reponse tilbage. Fordelen ved at bruge callbacks er at vi kan forsætte med at eksekvere noget andet kode, mens vi venter på svar fra fx en database. Det er også grund til at de kaldes ”callback”, man kan forstille sig at der ringes tilbage når det er klar.
+Vi bruger det tit i forbindelse med at fetche, når vi bruger .then() (.then() tager imod en callback funktion). Dette gør at vi kan kalde et endpoint, hvorefter vi kan udføre en anden funktion, efter vi har fået et reponse tilbage. Fordelen ved at bruge callbacks er at vi kan forsætte med at eksekvere noget andet kode, mens vi venter på svar fra fx en database. Det er også grund til at de kaldes ”callback”, man kan forstille sig at der ringes tilbage når det er klar.
       `,
       },
       {
@@ -251,9 +263,9 @@ Derudover er det vigtigt at man er konsistent med hvad end man gør, hvis man fx
         subEntriesId: 4,
         subTitle: "Scoping",
         text: `Der findes forskellige scopes i javascript. Block-scrope, Function-scope og Global-scope.
-Block scope: variabler defineret herinde kan ikke tilgåes uden for bloken, en block er inden for tuborg klammerne {}
-Funktion-scope: variabler defineret herinde kan ikke tilgåes uden for funktionen.
-Global-scope: variabler defineret her, kan tilgåes af alle i scripts og funktioner især med variabler i Global scope, hvor man har en masse forskellige scripts sammen (fx på en html-side), er det en god ide at bruge const variabler, hver gang man kan. Da dette vil sikre at man ikke ”kommer til” at rette i noget utilsigtet. 
+Block scope: variabler/funktioner defineret herinde kan ikke tilgåes uden for bloken, en block er inden for tuborg klammerne {}
+Funktion-scope: variabler/funktioner defineret herinde kan ikke tilgåes uden for funktionen.
+Global-scope: variabler/funktioner defineret her, kan tilgåes af alle funktioner i scriptet. Især med variabler i Global scope, hvor man har en masse forskellige scripts sammen (fx på en html-side), er det en god ide at bruge const variabler, hver gang man kan. Da dette vil sikre at man ikke ”kommer til” at rette i noget utilsigtet. 
 Lexical scope fortæller noget omkring hvor en variable har scope. I en nested funktion, vil den nestede funktion have samme scope som sin ”outer-level”  funktion.
 `,
       },
@@ -268,6 +280,7 @@ At bruge en variabel inden den er deklareret kan dog godt give fejl, da det ikke
       {
         subEntriesId: 6,
         subTitle: "Express",
+        imageUrl:"ressources/images/express1.png",
         text: `Express er et Nodejs web framework, der kommer med forskellige værktøjer som gør det nemt og hurtigt at lave web apps samt api’er.
 Express har en masse indbyggede http-metoder.
 For at bruge express, skal dette importeres samt installeres som dependency, dette gør man ved at skrive ”npm i express” i ens terminal, i roden af ens projekt.
@@ -285,13 +298,14 @@ Derefter skal der laves en instans af express inde i ens app.js fil, hvorefter m
       {
         subEntriesId: 1,
         subTitle: "Arrow-functions",
-        text: `En arrow funktion, er en anonym funktion, som kan hjælpe med at øge læsbarheden samt at gøre koden mere koncentreret. Disse bruges især i forbindelse med ”array metoder” (map, filter, reduce, foreach), der alle tager imod en callback funktion. 
-Arrow funktioner bruges også i forbindelse med callback funktioner, da man så kan sende en arrow funktion med som argument.
+        imageUrl:"ressources/images/arrow-function.png",
+        text: `En arrow funktion, er en anonym funktion, som kan hjælpe med at øge læsbarheden samt at gøre koden mere koncentreret. Disse bruges især i forbindelse med ”array metoder” (map, filter, reduce, foreach), der alle tager imod en callback funktion:
       `,
       },
       {
         subEntriesId: 2,
         subTitle: "Array-functions",
+        imageUrl:"ressources/images/map-example.png",
         text: `Array-funktioner er funktioner som kan ændre i elementerne i en array, ud fra den funktion man har sendt med som argument, og returnerer en opdaterede array.
 Det er en god ide at bruge disse array funktioner, da det gør det nemmere at forstå hvad der sker, fremfor en masse loops.
       •	.map() denne funktion returner en array, hvor elementerne i array er ændret i forholdet til den funktion 
@@ -300,11 +314,13 @@ Det er en god ide at bruge disse array funktioner, da det gør det nemmere at fo
         at få alle elementer med et bestemt navn, så er filter god til dette.
       •	.reduce() dene funktion returnerer en array reduceret til én værdi. Dette kunne fx være en sum af en bestemt 
         attribut på hvert element.
+Nedenfor er en snedig måde at finde max på et id tilhørende et object, ved hjælp af .map() og Math.max() metoderne:
       `,
       },
       {
         subEntriesId: 3,
         subTitle: "Import og Moduler",
+        imageUrl:"ressources/images/import-module.png",
         text: `I takt med at vores applikation bliver større, er det nødvendigt at begynde og bruge moduler. Moduler er andre filer, som kan indeholde klasser, ”libraries” og funktioner, disse kan man tilgå som vi fx gør med Express.  
 Der findes forskellige syntaks for at bruge moduler, CommonJs og ES Imports. 
 Require (CommonJs) var den gamle syntaks for at importere moduler på. Man importerede ved at bruge require(), hvorefter man kunne indtaste det man skal bruge: const express = require("express")
@@ -317,6 +333,7 @@ For at kunne benytte ES import syntaks, skal man i sin package.json skrive ”ty
       {
         subEntriesId: 4,
         subTitle: "Static files",
+        imageUrl:"ressources/images/static.png",
         text: `Express kan bruges til at servere statiske sider. For at kunne gøre det, kræver det et par steps.
 Udover express, skal vi også importere path: import path from "path";
 path modulet hjælper os med at definere stien til en bestemt fil korrekt, dette gør vi ved at kalde: path.resolve(sti-til-fil)
@@ -335,6 +352,7 @@ Grunden til at vi gør dette, er så at vi kan sikre vores app. På denne her m�
       {
         subEntriesId: 1,
         subTitle: "Package.json - udvidet",
+        imageUrl:"ressources/images/package-json.png",
         text: `Package.Json filen indeholder som tidligere nævnt en masse data omkring projektet.
 Meta data: Denne indeholder info omkring projektet såsom navn, forklaring eller version
 dependencies: Denne indeholder afhængighederne  som projektet har, og bliver tilgået når man skal skriver ”npm install”, hvorefter dependencies installeres.
@@ -346,6 +364,7 @@ Nodemon er et modul der er lækkert at bruge under udvikling, da det genstarter 
       {
         subEntriesId: 2,
         subTitle: "Fetch",
+        imageUrl:"ressources/images/fetch.png",
         text: `fetch() metoden i javacript, bruges til at sende ”requests” til en server, metoden returnere et ”promise”, som vi så kan ”pakke ud” til data.
 fetch() tager i mod to argumenter, url og options; hvor url er et krav at sende ,men options ikke er et krav. Option kan bruges til at specificere hvilken type request det er:  POST, PUT, DELETE 
 Dette er ikke nødvendigt for en GET request.
@@ -383,6 +402,7 @@ En package vi benytter er coss-env, som er en del af vores dependencies i packag
       {
         subEntriesId: 2,
         subTitle: "Redirect frontend",
+        imageUrl:"ressources/images/redirect-frontend.png",
         text: `Man kan redirecte på forskellige måde i frontenden:
       • Man kan gøre det direkte i html ved at bruge href=”url” inde i selve html taget.
       • Man kan gøre det ved at bruge javascript:  window.location.href = ”/url”
@@ -392,6 +412,7 @@ En package vi benytter er coss-env, som er en del af vores dependencies i packag
       {
         subEntriesId: 3,
         subTitle: "Redirect backend",
+        imageUrl:"ressources/images/redirect-backend.png",
         text: `Man kan redirecte i sin backend, ved hjælp af express.
 Måde at gøre det på er at bruge redirect metoden, som er indbygget i express. Vi kan bruge den på responset: res.redirect (”url”) inde i vores .get metode.
 Url’en der redirectes til skal eksistere i ens backend.
@@ -424,6 +445,7 @@ En svaghed kan være hastigheden som elementerne loades in (SSR er hurtigere i m
       {
         subEntriesId: 3,
         subTitle: "At bruge SSR",
+        imageUrl:"ressources/images/SSR.png",
         text: `Ved at benytte SSR, kan vi skabe nogen templates som vi kan loade ind.
 Vi kan bygge en side som vi kan render og sende retur til klienten, ud fra forskellige komponenter. Hvis man forsøger bryder en side ned i komponenter, så består den typisk af en header, noget indhold og en footer.
 For at kunne bruge filerne på vores server skal vi importere et modul der hedder fs. Dette er fil system modul, der tillader os at manipulere med filerne på vores server (læse, skrive, ændre, slette).
@@ -438,9 +460,9 @@ Denne variable kan vi så appende til andre variabler af samme type for til sids
     entriesId: 7,
     title: "Uge 41",
     userId: 1,
-    elective: "NodeJs",
+    elective: "Python",
     subEntries: [
-      { subEntriesId: 1, subTitle: "Svelte", text: "text3 for subtitle 1" },
+      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
       { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
     ],
@@ -449,20 +471,9 @@ Denne variable kan vi så appende til andre variabler af samme type for til sids
     entriesId: 8,
     title: "Uge 41",
     userId: 1,
-    elective: "Python",
-    subEntries: [
-      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
-      { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
-      { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
-    ],
-  },
-  {
-    entriesId: 9,
-    title: "Uge 41",
-    userId: 1,
     elective: "machinelearning",
     subEntries: [
-      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text3 for subtitle 1" },
+      { subEntriesId: 1, subTitle: "Subtitle 1", text: "text for subtitle 1" },
       { subEntriesId: 2, subTitle: "Subtitle 2", text: "text for subtitle 2" },
       { subEntriesId: 3, subTitle: "Subtitle 3", text: "text for subtitle 3" },
     ],

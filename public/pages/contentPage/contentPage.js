@@ -327,11 +327,10 @@ function editSubEntry(id, subentry) {
 
 function searchForEntries() {
   const searchString = document.getElementById("searchInput");
-  console.log(searchString.value);
-
-  fetch(`entries/search/${searchString.value}`).then((response) =>
-    response.json().then((data) => {
-      contentPanelDiv.innerHTML = "";
+  fetch(`entries/search/${searchString.value}`)
+  .then((response) => response.json()
+  .then((data) => {
+      contentPanelDiv.innerHTML = "";   
       data.data.forEach((subentry) => {
         appendContentPanel({}, subentry);
       });
@@ -340,6 +339,7 @@ function searchForEntries() {
 }
 
 addEntryButton.addEventListener("click", () => addNewEntry());
+
 addSubEntryButton.addEventListener("click", (e) => {
   fetch(`entries/${e.target.id}`)
     .then((response) => response.json())
@@ -370,7 +370,6 @@ async function updatePostWithImage(filename) {
     .then((data) => {
       const newSubEntry = { ...data.data };
       newSubEntry.imageUrl = `ressources/images/${filename}`;
-      console.log(data.data);
 
       fetch(
         `/entries/subentry/${entryId.textContent}/${subEntryId.textContent}`,
