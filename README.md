@@ -9,7 +9,7 @@ To run the project:
 - In the root of the project, run command: npm i
 - In the root of the project run command: npm run start-dev
 
-Application is now running, and you can navigate to local host, and the port specificed in package.json file.
+Application is now running, and you can navigate to local host, and the port specified in package.json file.
 
 To test the application, use test user:
 email: test1@test.dk
